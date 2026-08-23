@@ -1,0 +1,8 @@
+AssertJ JSON
+Copyright 2026 the original author or authors.
+
+This product includes software developed by
+The AssertJ Project (https://assertj.github.io/)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+see the LICENSE.txt file for details.
