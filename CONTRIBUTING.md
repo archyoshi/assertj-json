@@ -4,7 +4,7 @@ Thanks for helping improve AssertJ JSON.
 
 ## Development setup
 
-- use JDK 24 or newer if possible
+- use JDK 25 or newer if possible
 - run Maven with `mvn clean verify`
 - keep code formatted with the project style
 - write tests for every new assertion

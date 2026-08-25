@@ -21,7 +21,7 @@ Please describe the tests you added or modified:
 
 ## Checklist
 - [ ] I have read the [CONTRIBUTING.md](../CONTRIBUTING.md) guide
-- [ ] I have used JDK 24 or newer to build
+- [ ] I have used JDK 25 or newer to build
 - [ ] I have run `./mvnw spotless:apply` to format the code
 - [ ] I have added tests for my changes (if applicable)
 - [ ] I have updated the README if adding new assertions
