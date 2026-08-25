@@ -1,65 +1,63 @@
 /*
- * Copyright 2026 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* Copyright (C)2026 the original author or authors.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* https://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 package com.archyoshi.assertj.json.api;
-
-import java.util.Map;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static com.archyoshi.assertj.json.JsonAssertions.assertThat;
 import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 class JsonNodeAssertHasValueTest {
 
-  private ObjectMapper mapper;
+    private ObjectMapper mapper;
 
-  @BeforeEach
-  void setUp() {
-    mapper = new ObjectMapper();
-  }
+    @BeforeEach
+    void setUp() {
+        mapper = new ObjectMapper();
+    }
 
-  @Test
-  void should_pass_if_json_field_has_expected_string_value() {
-    final JsonNode actual = mapper.convertValue(Map.of("status", "active"), JsonNode.class);
-    assertThat(actual).hasValueForField("active", "status");
-  }
+    @Test
+    void shouldPassIfJsonFieldHasExpectedStringValue() {
+        final JsonNode actual = mapper.convertValue(Map.of("status", "active"), JsonNode.class);
+        assertThat(actual).hasValueForField("active", "status");
+    }
 
-  @Test
-  void should_pass_if_json_field_has_expected_integer_value() {
-    final JsonNode actual = mapper.convertValue(Map.of("age", 30), JsonNode.class);
-    assertThat(actual).hasValueForField(30, "age");
-  }
+    @Test
+    void shouldPassIfJsonFieldHasExpectedIntegerValue() {
+        final JsonNode actual = mapper.convertValue(Map.of("age", 30), JsonNode.class);
+        assertThat(actual).hasValueForField(30, "age");
+    }
 
-  @Test
-  void should_fail_if_json_field_has_different_string_value() {
-    final JsonNode actual = mapper.convertValue(Map.of("status", "active"), JsonNode.class);
-    thenThrownBy(() -> assertThat(actual).hasValueForField("inactive", "status"))
-        .isInstanceOf(AssertionError.class)
-        .hasMessageContaining("inactive");
-  }
+    @Test
+    void shouldFailIfJsonFieldHasDifferentStringValue() {
+        final JsonNode actual = mapper.convertValue(Map.of("status", "active"), JsonNode.class);
+        thenThrownBy(() -> assertThat(actual).hasValueForField("inactive", "status"))
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("inactive");
+    }
 
-  @Test
-  void should_fail_if_json_field_does_not_exist() {
-    final JsonNode actual = mapper.convertValue(Map.of("status", "active"), JsonNode.class);
-    thenThrownBy(() -> assertThat(actual).hasValueForField("test@example.com", "email"))
-        .isInstanceOf(AssertionError.class)
-        .hasMessageContaining("email");
-  }
+    @Test
+    void shouldFailIfJsonFieldDoesNotExist() {
+        final JsonNode actual = mapper.convertValue(Map.of("status", "active"), JsonNode.class);
+        thenThrownBy(() -> assertThat(actual).hasValueForField("test@example.com", "email"))
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("email");
+    }
 }

@@ -80,6 +80,7 @@
     <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
     <maven-surefire-report-plugin.version>3.5.6</maven-surefire-report-plugin.version>
     <spotless-maven-plugin.version>3.9.0</spotless-maven-plugin.version>
+    <google-java-format.version>1.36.1</google-java-format.version>
     <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
     <license-maven-plugin.version>5.1.1</license-maven-plugin.version>
   </properties>
@@ -194,21 +195,41 @@
         <version>${spotless-maven-plugin.version}</version>
         <configuration>
           <java>
-            <includes>
-              <include>src/main/java/**/*.java</include>
-              <include>src/test/java/**/*.java</include>
-            </includes>
-            <eclipse>
-              <version>4.33</version>
-              <file>${rootDirectory}/eclipse/assertj-eclipse-formatter.xml</file>
-            </eclipse>
-            <importOrder>
-              <order>#,java|javax,org,</order>
-            </importOrder>
-            <removeUnusedImports/>
-            <forbidWildcardImports/>
+            <googleJavaFormat>
+              <version>${google-java-format.version}</version>
+              <style>AOSP</style>
+              <reflowLongStrings>true</reflowLongStrings>
+              <formatJavadoc>true</formatJavadoc>
+            </googleJavaFormat>
+            <licenseHeader>
+              <content>
+/*
+* Copyright (C)$YEAR the original author or authors.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* https://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+              </content>
+            </licenseHeader>
           </java>
         </configuration>
+        <executions>
+          <execution>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 
       <plugin>
