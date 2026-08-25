@@ -25,13 +25,22 @@ assertThat(json)
 
 ```java
 import static com.archyoshi.assertj.json.JsonAssertions.assertThat;
-import static com.archyoshi.assertj.json.JsonAssertions.assertThatPath;
 
 Path file = Path.of("src/test/resources/example.json");
 
-assertThat(file).hasJsonContent("{ \"name\": \"Vegeta\" }");
+assertThat(file).hasSameContentAs("""
+    {
+      "name": "Vegeta"
+    }
+    """);
 
-assertThatPath("$.name").exists();
+assertThat(file).hasSameFieldsAs(Path.of("src/test/resources/expected.json"));
+
+assertThat(file).partiallyContains("""
+    {
+      "active": true
+    }
+    """);
 ```
 
 ## Maven

@@ -21,9 +21,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -42,37 +39,28 @@ import org.assertj.core.api.ThrowingConsumer;
 public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    private final ObjectMapper mapper;
 
+    /**
+     * Creates an assertion object for an already parsed JSON node.
+     *
+     * @param actual the parsed JSON node
+     */
     public JsonNodeAssert(final JsonNode actual) {
+        this(actual, MAPPER);
+    }
+
+    /**
+     * Creates an assertion object for an already parsed JSON node using the supplied mapper.
+     *
+     * @param actual the parsed JSON node
+     * @param mapper the mapper used for assertion-side parsing and conversions
+     */
+    public JsonNodeAssert(final JsonNode actual, final ObjectMapper mapper) {
         super(actual, JsonNodeAssert.class);
+        this.mapper = mapper;
     }
 
-    /**
-     * Creates a new assertion object for the given JSON string.
-     *
-     * @param json the JSON string to parse
-     * @since 0.1.0
-     */
-    public JsonNodeAssert(final String json) {
-        this(parseJson(json));
-    }
-
-    /**
-     * Creates a new assertion object for the given JSON file.
-     *
-     * @param jsonFile the path to the JSON file
-     * @since 0.1.0
-     */
-    public JsonNodeAssert(final Path jsonFile) {
-        this(readJsonFile(jsonFile));
-    }
-
-    /**
-     * Creates a new assertion object for the given JSON node.
-     *
-     * @param actual the JSON node
-     * @since 0.1.0
-     */
     /**
      * Verifies that the actual JSON object has a field with the given name.
      *
@@ -96,7 +84,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert hasField(final String fieldName) {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         isNotNull();
         if (!node.has(fieldName)) {
             failWithActualExpectedAndMessage(
@@ -112,7 +100,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @return {@code this} assertion object
      */
     public JsonNodeAssert doesNotHaveField(final String fieldName) {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         isNotNull();
         if (node.has(fieldName)) {
             failWithActualExpectedAndMessage(
@@ -129,7 +117,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @return {@code this} assertion object
      */
     public JsonNodeAssert hasTypeForField(final String fieldName, final JsonNodeType expectedType) {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         hasField(fieldName);
         assertThat(node.get(fieldName).getNodeType()).isEqualTo(expectedType);
         return this;
@@ -146,9 +134,9 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      */
     public <T> JsonNodeAssert hasTypedValueForField(
             final T expectedValue, final String fieldName, final Class<T> valueType) {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         hasField(fieldName);
-        assertThat(MAPPER.convertValue(node.get(fieldName), valueType)).isEqualTo(expectedValue);
+        assertThat(mapper.convertValue(node.get(fieldName), valueType)).isEqualTo(expectedValue);
         return this;
     }
 
@@ -176,7 +164,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert hasValueForField(final String expectedValue, final String fieldName) {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         hasField(fieldName);
         final JsonNode field = node.get(fieldName);
         assertThat(field.asText()).isEqualTo(expectedValue);
@@ -207,7 +195,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert hasValueForField(final int expectedValue, final String fieldName) {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         hasField(fieldName);
         final JsonNode field = node.get(fieldName);
         assertThat(field.asInt()).isEqualTo(expectedValue);
@@ -257,7 +245,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
             final String fieldName,
             final Predicate<Integer> condition,
             final String relation) {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         hasField(fieldName);
         final JsonNode field = node.get(fieldName);
         if (!field.isNumber()) {
@@ -297,7 +285,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert hasJsonContent(final String expectedJson) {
-        final JsonNode actualNode = actualAsJsonNode();
+        final JsonNode actualNode = actual;
         final JsonNode expectedNode = parseJson(expectedJson);
         assertThat(actualNode).isEqualTo(expectedNode);
         return this;
@@ -312,7 +300,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      */
     public JsonNodeAssert isEqualToIgnoringFields(
             final JsonNode expected, final List<String> ignoredFields) {
-        final JsonNode actualNode = actualAsJsonNode();
+        final JsonNode actualNode = actual;
         if (!equalsIgnoringFields(actualNode, expected, ignoredFields)) {
             failWithMessage(
                     "Expected JSON to match while ignoring fields %s, but was %s",
@@ -383,7 +371,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert isObject() {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         assertThat(node.isObject()).isTrue();
         return this;
     }
@@ -409,7 +397,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert isArray() {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         assertThat(node.isArray()).isTrue();
         return this;
     }
@@ -439,7 +427,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert isEmpty() {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         assertThat(node.size()).isZero();
         return this;
     }
@@ -465,7 +453,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert isNotEmpty() {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         assertThat(node.size()).isGreaterThan(0);
         return this;
     }
@@ -492,7 +480,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert hasSize(final int expectedSize) {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         assertThat(node.size()).isEqualTo(expectedSize);
         return this;
     }
@@ -516,7 +504,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @return an assertion object for the child node
      */
     public JsonNodeAssert extractingFieldAsJsonNode(final String fieldName) {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         hasField(fieldName);
         return new JsonNodeAssert(node.get(fieldName));
     }
@@ -528,7 +516,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @return an assertion object for the array elements
      */
     public JsonIterableAssert extractingFieldAsArray(final String fieldName) {
-        final JsonNode node = actualAsJsonNode();
+        final JsonNode node = actual;
         hasField(fieldName);
         return JsonIterableAssert.assertThat(node.get(fieldName));
     }
@@ -547,34 +535,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
         return this;
     }
 
-    private JsonNode actualAsJsonNode() {
-        final Object actualValue = actual;
-        if (actualValue instanceof final JsonNode jsonNode) {
-            return jsonNode;
-        }
-        if (actualValue instanceof final String str) {
-            return parseJson(str);
-        }
-        if (actualValue instanceof final Path path) {
-            return readJsonFile(path);
-        }
-        throw new AssertionError("JSON actual value must be JsonNode, String or Path");
-    }
-
-    private static JsonNode parseJson(final String json) {
+    private JsonNode parseJson(final String json) {
         try {
-            return MAPPER.readTree(json);
+            return mapper.readTree(json);
         } catch (final JsonProcessingException e) {
             throw new AssertionError("Invalid JSON content: " + e.getOriginalMessage(), e);
-        }
-    }
-
-    private static JsonNode readJsonFile(final Path jsonFile) {
-        try {
-            final String contents = Files.readString(jsonFile);
-            return parseJson(contents);
-        } catch (final IOException e) {
-            throw new AssertionError("Unable to read JSON file: " + jsonFile, e);
         }
     }
 }

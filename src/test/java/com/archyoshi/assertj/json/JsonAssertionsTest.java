@@ -19,6 +19,8 @@ import static com.archyoshi.assertj.json.JsonAssertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 class JsonAssertionsTest {
@@ -39,5 +41,38 @@ class JsonAssertionsTest {
         final ObjectNode node = mapper.createObjectNode();
         node.put("name", "Goku");
         assertThat(node).hasField("name").hasValueForField("Goku", "name");
+    }
+
+    @Test
+    void shouldUseProvidedObjectMapperForStringParsing() {
+        final ObjectMapper mapper = new ObjectMapper();
+
+        assertThat(
+                        """
+                        { "name": "Goku" }
+                        """,
+                        mapper)
+                .hasValueForField("Goku", "name");
+    }
+
+    @Test
+    void shouldUseProvidedObjectMapperForFileParsing() throws Exception {
+        final ObjectMapper mapper = new ObjectMapper();
+        final Path actual = Files.createTempFile("assertj-json-", ".json");
+        final Path expected = Files.createTempFile("assertj-json-", ".json");
+        Files.writeString(
+                actual,
+                """
+                { "name": "Goku" }
+                """);
+        Files.writeString(
+                expected,
+                """
+                {
+                  "name": "Goku"
+                }
+                """);
+
+        assertThat(actual, mapper).hasSameContentAs(expected);
     }
 }

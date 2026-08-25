@@ -34,7 +34,7 @@ public class JsonIterableAssert
         extends AbstractIterableAssert<
                 JsonIterableAssert, List<JsonNode>, JsonNode, JsonNodeAssert> {
 
-    protected JsonIterableAssert(final List<JsonNode> actual) {
+    public JsonIterableAssert(final List<JsonNode> actual) {
         super(actual, JsonIterableAssert.class);
     }
 
@@ -52,7 +52,7 @@ public class JsonIterableAssert
             throw new AssertionError(
                     "Expected actual JSON node to be an array, but was " + actual.getNodeType());
         }
-        List<JsonNode> elements = new ArrayList<>();
+        final List<JsonNode> elements = new ArrayList<>();
         actual.forEach(elements::add);
         return new JsonIterableAssert(elements);
     }
@@ -148,7 +148,7 @@ public class JsonIterableAssert
     public JsonNodeAssert extractingElementWithFieldAndValue(
             final String fieldName, final String fieldValue) {
         isNotNull();
-        for (JsonNode element : actual) {
+        for (final JsonNode element : actual) {
             if (hasFieldAndValue(element, fieldName, fieldValue)) {
                 return new JsonNodeAssert(element);
             }
@@ -156,7 +156,7 @@ public class JsonIterableAssert
         failWithMessage(
                 "Expected to find an element with field '%s' and value '%s'",
                 fieldName, fieldValue);
-        return new JsonNodeAssert((JsonNode) null);
+        return new JsonNodeAssert(null);
     }
 
     private boolean containsElementWithField(final String fieldName) {
@@ -184,7 +184,7 @@ public class JsonIterableAssert
     @Override
     protected JsonIterableAssert newAbstractIterableAssert(
             final Iterable<? extends JsonNode> iterable) {
-        List<JsonNode> elements = new ArrayList<>();
+        final List<JsonNode> elements = new ArrayList<>();
         iterable.forEach(elements::add);
         return new JsonIterableAssert(elements);
     }

@@ -15,10 +15,12 @@
 */
 package com.archyoshi.assertj.json;
 
+import com.archyoshi.assertj.json.api.JsonComparisonAssert;
 import com.archyoshi.assertj.json.api.JsonIterableAssert;
 import com.archyoshi.assertj.json.api.JsonNodeAssert;
-import com.archyoshi.assertj.json.api.JsonPathAssert;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.Path;
 
 /**
@@ -40,6 +42,8 @@ import java.nio.file.Path;
  */
 public final class JsonAssertions {
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     private JsonAssertions() {
         throw new UnsupportedOperationException("This class doesn't need to be instantiated !");
     }
@@ -59,7 +63,7 @@ public final class JsonAssertions {
     /**
      * Creates a new assertion object for the given JSON string.
      *
-     * <p>The string is parsed as JSON content.
+     * <p>The string is parsed as JSON content. The default {@code ObjectMapper} is used.
      *
      * @param json the JSON string to assert on
      * @return a new {@link JsonNodeAssert} instance
@@ -67,21 +71,43 @@ public final class JsonAssertions {
      * @since 0.1.0
      */
     public static JsonNodeAssert assertThat(final String json) {
-        return new JsonNodeAssert(json);
+        return assertThat(json, MAPPER);
+    }
+
+    /**
+     * Creates an assertion object for JSON parsed with the supplied mapper.
+     *
+     * @param json the JSON string to assert on
+     * @param mapper the mapper used to parse the string
+     * @return a new {@link JsonNodeAssert} instance
+     */
+    public static JsonNodeAssert assertThat(final String json, final ObjectMapper mapper) {
+        return new JsonNodeAssert(parseJson(json, mapper), mapper);
     }
 
     /**
      * Creates a new assertion object for the given JSON file.
      *
-     * <p>The file is read and parsed as JSON content.
+     * <p>The file is read and parsed as JSON content. The default {@code ObjectMapper} is used.
      *
      * @param jsonFile the path to the JSON file to assert on
      * @return a new {@link JsonNodeAssert} instance
      * @throws AssertionError if the file cannot be read or contains invalid JSON
      * @since 0.1.0
      */
-    public static JsonNodeAssert assertThat(final Path jsonFile) {
-        return new JsonNodeAssert(jsonFile);
+    public static JsonComparisonAssert assertThat(final Path jsonFile) {
+        return assertThat(jsonFile, MAPPER);
+    }
+
+    /**
+     * Creates an assertion object for a JSON file parsed with the supplied mapper.
+     *
+     * @param jsonFile the JSON file to assert on
+     * @param mapper the mapper used to parse JSON
+     * @return a new {@link JsonComparisonAssert} instance
+     */
+    public static JsonComparisonAssert assertThat(final Path jsonFile, final ObjectMapper mapper) {
+        return new JsonComparisonAssert(jsonFile, mapper);
     }
 
     /**
@@ -96,14 +122,11 @@ public final class JsonAssertions {
         return JsonIterableAssert.assertThat(actual);
     }
 
-    /**
-     * Creates a new assertion object for the given JSON path expression.
-     *
-     * @param path the JSON path expression
-     * @return a new {@link JsonPathAssert} instance
-     * @since 0.1.0
-     */
-    public static JsonPathAssert assertThatPath(final String path) {
-        return new JsonPathAssert(path);
+    private static JsonNode parseJson(final String json, final ObjectMapper mapper) {
+        try {
+            return mapper.readTree(json);
+        } catch (JsonProcessingException e) {
+            throw new AssertionError("Invalid JSON content: " + e.getOriginalMessage(), e);
+        }
     }
 }

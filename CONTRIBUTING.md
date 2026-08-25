@@ -33,7 +33,7 @@ mvn clean verify
 
 - follow the AssertJ style for assertions and test naming
 - use package-private test classes when possible
-- prefer fluent assertion names such as `hasField`, `hasValueForField`, `isObject`
+- prefer fluent assertion names such as `hasField`, `hasValueForField`, `hasSameContentAs`
 - add Javadoc to each public assertion method
 - ensure test method names use camelCase and describe the expected behavior, for example
 	`shouldPassIfJsonObjectHasField` or `shouldFailIfJsonObjectDoesNotHaveField`
