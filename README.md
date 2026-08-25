@@ -12,25 +12,26 @@ AssertJ JSON adds fluent assertions tailored for JSON payloads, JSON files, and 
 ## Usage
 
 ```java
-import static org.assertj.json.JsonAssertions.assertThat;
+import static com.archyoshi.assertj.json.JsonAssertions.assertThat;
 
-String json = "{ \"name\": \"Alice\", \"age\": 30, \"active\": true }";
+String json = "{ \"name\": \"Vegeta\", \"age\": 30, \"active\": true }";
 
 assertThat(json)
   .hasField("name")
-  .hasValue("name", "Alice")
+  .hasValueForField("Vegeta", "name")
   .hasField("age")
-  .hasValue("age", 30);
+  .hasValueForField(30, "age");
 ```
 
 ```java
-import static org.assertj.json.JsonAssertions.assertThat;
+import static com.archyoshi.assertj.json.JsonAssertions.assertThat;
+import static com.archyoshi.assertj.json.JsonAssertions.assertThatPath;
 
 Path file = Path.of("src/test/resources/example.json");
 
-assertThat(file)
-  .exists()
-  .hasJsonContent("{ \"name\": \"Alice\" }");
+assertThat(file).hasJsonContent("{ \"name\": \"Vegeta\" }");
+
+assertThatPath("$.name").exists();
 ```
 
 ## Maven

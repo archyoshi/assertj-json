@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.assertj.json.api;
+package com.archyoshi.assertj.json.api;
 
-import static org.assertj.core.api.BDDAssertions.then;
-import static org.assertj.core.api.BDDAssertions.thenThrownBy;
-import static org.assertj.json.JsonAssertions.assertThat;
+import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class JsonNodeAssert_hasSize_Test {
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static com.archyoshi.assertj.json.JsonAssertions.assertThat;
+import static org.assertj.core.api.BDDAssertions.thenThrownBy;
+
+class JsonNodeAssertHasSizeTest {
 
   private ObjectMapper mapper;
 
@@ -34,26 +37,21 @@ class JsonNodeAssert_hasSize_Test {
   }
 
   @Test
-  void should_pass_if_json_array_has_expected_size() throws Exception {
-    // GIVEN
-    JsonNode actual = mapper.readTree("[1, 2, 3]");
-    // WHEN/THEN
+  void shouldPassIfJsonArrayHasExpectedSize() throws JsonProcessingException {
+    final JsonNode actual = mapper.readTree("[1, 2, 3]");
     assertThat(actual).hasSize(3);
   }
 
   @Test
-  void should_pass_if_json_object_has_expected_size() {
-    // GIVEN
-    JsonNode actual = mapper.convertValue(java.util.Map.of("a", 1, "b", 2, "c", 3), JsonNode.class);
-    // WHEN/THEN
+  void shouldPassIfJsonObjectHasExpectedSize() {
+    final JsonNode actual = mapper.convertValue(
+            Map.of("a", 1, "b", 2, "c", 3), JsonNode.class);
     assertThat(actual).hasSize(3);
   }
 
   @Test
-  void should_fail_if_json_array_has_different_size() throws Exception {
-    // GIVEN
-    JsonNode actual = mapper.readTree("[1, 2, 3]");
-    // WHEN/THEN
+  void shouldFailIfJsonArrayHasDifferentSize() throws JsonProcessingException {
+    final JsonNode actual = mapper.readTree("[1, 2, 3]");
     thenThrownBy(() -> assertThat(actual).hasSize(5))
         .isInstanceOf(AssertionError.class)
       .hasMessageContaining("expected: 5")
@@ -61,10 +59,8 @@ class JsonNodeAssert_hasSize_Test {
   }
 
   @Test
-  void should_fail_if_json_object_has_different_size() {
-    // GIVEN
-    JsonNode actual = mapper.convertValue(java.util.Map.of("a", 1, "b", 2), JsonNode.class);
-    // WHEN/THEN
+  void shouldFailIfJsonObjectHasDifferentSize() {
+    final JsonNode actual = mapper.convertValue(Map.of("a", 1, "b", 2), JsonNode.class);
     thenThrownBy(() -> assertThat(actual).hasSize(5))
         .isInstanceOf(AssertionError.class)
       .hasMessageContaining("expected: 5")

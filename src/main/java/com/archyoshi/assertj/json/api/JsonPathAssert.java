@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.assertj.json.api;
+package com.archyoshi.assertj.json.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

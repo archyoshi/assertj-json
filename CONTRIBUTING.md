@@ -13,7 +13,7 @@ Thanks for helping improve AssertJ JSON.
 
 - follow the AssertJ style for assertions and test naming
 - use package-private test classes when possible
-- prefer fluent assertion names such as `hasField`, `hasValue`, `isObject`
+- prefer fluent assertion names such as `hasField`, `hasValueForField`, `isObject`
 - add Javadoc to each public assertion method
 - ensure test method names follow `should_pass_xxx` / `should_fail_xxx`
 

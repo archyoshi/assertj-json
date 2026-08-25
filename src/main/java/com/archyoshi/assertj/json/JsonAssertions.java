@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.assertj.json;
+package com.archyoshi.assertj.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.nio.file.Path;
-import org.assertj.json.api.JsonNodeAssert;
-import org.assertj.json.api.JsonPathAssert;
+import com.archyoshi.assertj.json.api.JsonNodeAssert;
+import com.archyoshi.assertj.json.api.JsonPathAssert;
 
 /**
  * Entry point for JSON assertions.
@@ -26,19 +26,19 @@ import org.assertj.json.api.JsonPathAssert;
  * Example:
  *
  * <pre><code class='java'> ObjectMapper mapper = new ObjectMapper();
- * JsonNode json = mapper.readTree("{\"name\": \"Alice\", \"age\": 30}");
+ * JsonNode json = mapper.readTree("{\"name\": \"Vegeta\", \"age\": 30}");
  *
  * // Use static import for convenience
- * import static org.assertj.json.JsonAssertions.assertThat;
+ * import static com.archyoshi.assertj.json.JsonAssertions.assertThat;
  *
- * assertThat(json).hasField("name").hasValue("name", "Alice"); </code></pre>
+ * assertThat(json).hasField("name").hasValueForField("Vegeta", "name"); </code></pre>
  *
  * @since 0.1.0
  */
 public final class JsonAssertions {
 
   private JsonAssertions() {
-    // Utility class, cannot be instantiated
+    throw new UnsupportedOperationException("This class doesn't need to be instantiated !");
   }
 
   /**
@@ -46,10 +46,10 @@ public final class JsonAssertions {
    *
    * @param actual the JSON node to assert on
    * @return a new {@link JsonNodeAssert} instance
-   * @throws NullPointerException if the actual JSON node is null
+    * @throws AssertionError if the actual JSON node is null when an assertion is evaluated
    * @since 0.1.0
    */
-  public static JsonNodeAssert assertThat(JsonNode actual) {
+  public static JsonNodeAssert assertThat(final JsonNode actual) {
     return new JsonNodeAssert(actual);
   }
 
@@ -63,7 +63,7 @@ public final class JsonAssertions {
    * @throws AssertionError if the string is not valid JSON
    * @since 0.1.0
    */
-  public static JsonNodeAssert assertThat(String json) {
+  public static JsonNodeAssert assertThat(final String json) {
     return new JsonNodeAssert(json);
   }
 
@@ -77,7 +77,7 @@ public final class JsonAssertions {
    * @throws AssertionError if the file cannot be read or contains invalid JSON
    * @since 0.1.0
    */
-  public static JsonNodeAssert assertThat(Path jsonFile) {
+  public static JsonNodeAssert assertThat(final Path jsonFile) {
     return new JsonNodeAssert(jsonFile);
   }
 
@@ -88,7 +88,7 @@ public final class JsonAssertions {
    * @return a new {@link JsonPathAssert} instance
    * @since 0.1.0
    */
-  public static JsonPathAssert assertThatPath(String path) {
+  public static JsonPathAssert assertThatPath(final String path) {
     return new JsonPathAssert(path);
   }
 }

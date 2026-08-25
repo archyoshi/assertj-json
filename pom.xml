@@ -16,7 +16,7 @@
   <inceptionYear>2026</inceptionYear>
 
   <organization>
-    <name>Thinkertech</name>
+    <name>archyoshi</name>
     <url>https://archyoshi.github.io/</url>
   </organization>
 
@@ -32,7 +32,7 @@
     <developer>
       <id>archyoshi</id>
       <name>Archyoshi</name>
-      <email>arch.thinkertech@gmail.com</email>
+      <email>arch.thinkertech+assertj@gmail.com</email>
       <roles>
         <role>Owner</role>
         <role>Developer</role>
@@ -59,6 +59,7 @@
     <maven.compiler.source>25</maven.compiler.source>
     <maven.compiler.target>25</maven.compiler.target>
     <maven.compiler.parameters>true</maven.compiler.parameters>
+    <currentYear>2026</currentYear>
     <rootDirectory>${project.basedir}</rootDirectory>
 
     <!-- Dependency versions -->
