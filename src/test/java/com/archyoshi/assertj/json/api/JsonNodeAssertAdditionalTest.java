@@ -26,6 +26,9 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author archyoshi
+ */
 class JsonNodeAssertAdditionalTest {
 
     private JsonNode actual;

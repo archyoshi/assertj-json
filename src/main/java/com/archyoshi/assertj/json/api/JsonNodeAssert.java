@@ -34,6 +34,7 @@ import org.assertj.core.api.ThrowingConsumer;
  * <p>This class extends AssertJ's {@link AbstractAssert} to provide fluent assertions for JSON
  * structures parsed using Jackson.
  *
+ * @author archyoshi
  * @since 0.1.0
  */
 public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
@@ -115,6 +116,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param fieldName the field name to verify
      * @param expectedType the expected node type
      * @return {@code this} assertion object
+     * @since 0.1.0
      */
     public JsonNodeAssert hasTypeForField(final String fieldName, final JsonNodeType expectedType) {
         final JsonNode node = actual;
@@ -131,6 +133,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param valueType the target Java type
      * @param <T> the target Java type
      * @return {@code this} assertion object
+     * @since 0.1.0
      */
     public <T> JsonNodeAssert hasTypedValueForField(
             final T expectedValue, final String fieldName, final Class<T> valueType) {
@@ -208,6 +211,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedValue the expected value
      * @param fieldName the field name to verify
      * @return {@code this} assertion object
+     * @since 0.1.0
      */
     public JsonNodeAssert hasValueEqualForField(final int expectedValue, final String fieldName) {
         return hasNumericValueForField(
@@ -220,6 +224,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedValue the exclusive lower bound
      * @param fieldName the field name to verify
      * @return {@code this} assertion object
+     * @since 0.1.0
      */
     public JsonNodeAssert hasValueMoreThanForField(
             final int expectedValue, final String fieldName) {
@@ -233,6 +238,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedValue the exclusive upper bound
      * @param fieldName the field name to verify
      * @return {@code this} assertion object
+     * @since 0.1.0
      */
     public JsonNodeAssert hasValueLessThanForField(
             final int expectedValue, final String fieldName) {
@@ -371,8 +377,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert isObject() {
+        isNotNull();
         final JsonNode node = actual;
-        assertThat(node.isObject()).isTrue();
+        if (!node.isObject()) {
+            failWithMessage("Expected JSON node to be an OBJECT but was <%s>", node.getNodeType());
+        }
         return this;
     }
 
@@ -397,8 +406,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert isArray() {
+        isNotNull();
         final JsonNode node = actual;
-        assertThat(node.isArray()).isTrue();
+        if (!node.isArray()) {
+            failWithMessage("Expected JSON node to be an ARRAY but was <%s>", node.getNodeType());
+        }
         return this;
     }
 
@@ -427,8 +439,17 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert isEmpty() {
+        isNotNull();
         final JsonNode node = actual;
-        assertThat(node.size()).isZero();
+        if (!node.isContainerNode()) {
+            failWithMessage(
+                    "Expected JSON node to be an object or array to check emptiness, but was"
+                            + " <%s>",
+                    node.getNodeType());
+        }
+        if (node.size() != 0) {
+            failWithMessage("Expected JSON node to be empty but had <%d> element(s)", node.size());
+        }
         return this;
     }
 
@@ -453,8 +474,17 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert isNotEmpty() {
+        isNotNull();
         final JsonNode node = actual;
-        assertThat(node.size()).isGreaterThan(0);
+        if (!node.isContainerNode()) {
+            failWithMessage(
+                    "Expected JSON node to be an object or array to check emptiness, but was"
+                            + " <%s>",
+                    node.getNodeType());
+        }
+        if (node.size() == 0) {
+            failWithMessage("Expected JSON node not to be empty but it was");
+        }
         return this;
     }
 
@@ -491,6 +521,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedSize the expected array size
      * @param fieldName the array field name
      * @return {@code this} assertion object
+     * @since 0.1.0
      */
     public JsonNodeAssert hasSizeForArrayField(final int expectedSize, final String fieldName) {
         extractingFieldAsArray(fieldName).hasSize(expectedSize);
@@ -502,6 +533,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      *
      * @param fieldName the field name to extract
      * @return an assertion object for the child node
+     * @since 0.1.0
      */
     public JsonNodeAssert extractingFieldAsJsonNode(final String fieldName) {
         final JsonNode node = actual;
@@ -514,6 +546,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      *
      * @param fieldName the array field name
      * @return an assertion object for the array elements
+     * @since 0.1.0
      */
     public JsonIterableAssert extractingFieldAsArray(final String fieldName) {
         final JsonNode node = actual;
@@ -526,6 +559,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      *
      * @param assertions assertions to apply
      * @return {@code this} assertion object
+     * @since 0.1.0
      */
     @SafeVarargs
     public final JsonNodeAssert hasNodeThatSatisfies(

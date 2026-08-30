@@ -38,6 +38,7 @@ import java.nio.file.Path;
  * assertThat(json).hasField("name").hasValueForField("Vegeta", "name"); </code>
  * </pre>
  *
+ * @author archyoshi
  * @since 0.1.0
  */
 public final class JsonAssertions {

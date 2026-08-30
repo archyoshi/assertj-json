@@ -24,6 +24,9 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author archyoshi
+ */
 class JsonNodeAssertIsEmptyTest {
 
     private ObjectMapper mapper;
@@ -50,8 +53,7 @@ class JsonNodeAssertIsEmptyTest {
         final JsonNode actual = mapper.convertValue(Map.of("name", "Vegeta"), JsonNode.class);
         thenThrownBy(() -> assertThat(actual).isEmpty())
                 .isInstanceOf(AssertionError.class)
-                .hasMessageContaining("expected: 0")
-                .hasMessageContaining("but was: 1");
+                .hasMessageContaining("Expected JSON node to be empty but had <1> element(s)");
     }
 
     @Test
@@ -59,7 +61,47 @@ class JsonNodeAssertIsEmptyTest {
         final JsonNode actual = mapper.readTree("[1, 2, 3]");
         thenThrownBy(() -> assertThat(actual).isEmpty())
                 .isInstanceOf(AssertionError.class)
-                .hasMessageContaining("expected: 0")
-                .hasMessageContaining("but was: 3");
+                .hasMessageContaining("Expected JSON node to be empty but had <3> element(s)");
+    }
+
+    @Test
+    void shouldPassIfJsonObjectIsNotEmpty() {
+        final JsonNode actual = mapper.convertValue(Map.of("name", "Vegeta"), JsonNode.class);
+        assertThat(actual).isNotEmpty();
+    }
+
+    @Test
+    void shouldPassIfJsonArrayIsNotEmpty() throws Exception {
+        final JsonNode actual = mapper.readTree("[1, 2, 3]");
+        assertThat(actual).isNotEmpty();
+    }
+
+    @Test
+    void shouldFailIfJsonObjectIsEmptyWhenAssertingNotEmpty() {
+        final JsonNode actual = mapper.convertValue(Map.of(), JsonNode.class);
+        thenThrownBy(() -> assertThat(actual).isNotEmpty())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Expected JSON node not to be empty but it was");
+    }
+
+    @Test
+    void shouldFailIfJsonArrayIsEmptyWhenAssertingNotEmpty() {
+        final JsonNode actual = mapper.createArrayNode();
+        thenThrownBy(() -> assertThat(actual).isNotEmpty())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Expected JSON node not to be empty but it was");
+    }
+
+    @Test
+    void shouldFailIfNodeIsNotObjectOrArray() throws Exception {
+        final JsonNode actual = mapper.readTree("\"string value\"");
+        thenThrownBy(() -> assertThat(actual).isEmpty())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining(
+                        "Expected JSON node to be an object or array to check emptiness");
+        thenThrownBy(() -> assertThat(actual).isNotEmpty())
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining(
+                        "Expected JSON node to be an object or array to check emptiness");
     }
 }

@@ -28,6 +28,7 @@ import org.assertj.core.api.AbstractIterableAssert;
  * <p>In addition to the standard AssertJ iterable assertions, this class provides JSON-aware
  * assertions for finding object elements by field name and value.
  *
+ * @author archyoshi
  * @since 0.1.0
  */
 public class JsonIterableAssert
@@ -153,10 +154,11 @@ public class JsonIterableAssert
                 return new JsonNodeAssert(element);
             }
         }
+        // failWithMessage never returns — the throw keeps the compiler happy
         failWithMessage(
                 "Expected to find an element with field '%s' and value '%s'",
                 fieldName, fieldValue);
-        return new JsonNodeAssert(null);
+        throw new AssertionError("unreachable");
     }
 
     private boolean containsElementWithField(final String fieldName) {

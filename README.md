@@ -59,6 +59,10 @@ assertThat(file).partiallyContains("""
 mvn clean verify
 ```
 
+## Author
+
+- [archyoshi](https://github.com/archyoshi)
+
 ## License
 
 This project is licensed under the Apache License 2.0.

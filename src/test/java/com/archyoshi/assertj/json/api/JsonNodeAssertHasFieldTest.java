@@ -25,6 +25,9 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author archyoshi
+ */
 class JsonNodeAssertHasFieldTest {
 
     private ObjectMapper mapper;

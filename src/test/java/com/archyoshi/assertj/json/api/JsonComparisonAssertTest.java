@@ -21,8 +21,14 @@ import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+/**
+ * @author archyoshi
+ */
 class JsonComparisonAssertTest {
+
+    @TempDir Path tempDir;
 
     @Test
     void shouldCompareFieldNamesIndependentlyOfOrderAndValues() throws Exception {
@@ -74,7 +80,8 @@ class JsonComparisonAssertTest {
                 .isInstanceOf(AssertionError.class);
     }
 
-    private static Path jsonFile(final String content) throws Exception {
-        return Files.writeString(Files.createTempFile("assertj-json-", ".json"), content);
+    private Path jsonFile(final String content) throws Exception {
+        final Path file = Files.createTempFile(tempDir, "assertj-json-", ".json");
+        return Files.writeString(file, content);
     }
 }

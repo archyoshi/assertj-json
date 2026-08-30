@@ -33,6 +33,7 @@ import org.assertj.core.api.AbstractAssert;
  * <p>JSON is parsed before comparison, so whitespace and object field ordering do not affect
  * equality.
  *
+ * @author archyoshi
  * @since 0.1.0
  */
 public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, Path> {
