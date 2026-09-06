@@ -92,7 +92,7 @@ class JsonIterableAssertTest {
 
     @Test
     void shouldRejectNullAndNonArrayNodes() throws Exception {
-        thenThrownBy(() -> assertThatArray(null)).isInstanceOf(AssertionError.class);
+        thenThrownBy(() -> assertThatArray((JsonNode) null)).isInstanceOf(AssertionError.class);
         thenThrownBy(() -> assertThatArray(mapper.readTree("{}")))
                 .isInstanceOf(AssertionError.class);
     }

@@ -21,11 +21,22 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.AbstractBigDecimalAssert;
+import org.assertj.core.api.AbstractBooleanAssert;
+import org.assertj.core.api.AbstractDoubleAssert;
+import org.assertj.core.api.AbstractIntegerAssert;
+import org.assertj.core.api.AbstractLongAssert;
+import org.assertj.core.api.AbstractStringAssert;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowingConsumer;
 
 /**
@@ -134,7 +145,10 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param <T> the target Java type
      * @return {@code this} assertion object
      * @since 0.1.0
+     * @deprecated Use type-specific extraction methods like {@link #extractFieldAsString(String)}
+     *     instead.
      */
+    @Deprecated
     public <T> JsonNodeAssert hasTypedValueForField(
             final T expectedValue, final String fieldName, final Class<T> valueType) {
         final JsonNode node = actual;
@@ -165,7 +179,9 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @throws AssertionError if the actual JSON object is null
      * @throws AssertionError if the field does not exist or has a different value
      * @since 0.1.0
+     * @deprecated Use {@link #extractFieldAsString(String)} instead.
      */
+    @Deprecated
     public JsonNodeAssert hasValueForField(final String expectedValue, final String fieldName) {
         final JsonNode node = actual;
         hasField(fieldName);
@@ -196,7 +212,9 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @throws AssertionError if the actual JSON object is null
      * @throws AssertionError if the field does not exist or has a different value
      * @since 0.1.0
+     * @deprecated Use {@link #extractFieldAsInteger(String)} instead.
      */
+    @Deprecated
     public JsonNodeAssert hasValueForField(final int expectedValue, final String fieldName) {
         final JsonNode node = actual;
         hasField(fieldName);
@@ -212,7 +230,9 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param fieldName the field name to verify
      * @return {@code this} assertion object
      * @since 0.1.0
+     * @deprecated Use {@link #extractFieldAsInteger(String)} instead.
      */
+    @Deprecated
     public JsonNodeAssert hasValueEqualForField(final int expectedValue, final String fieldName) {
         return hasNumericValueForField(
                 expectedValue, fieldName, value -> value == expectedValue, "equal to");
@@ -225,7 +245,9 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param fieldName the field name to verify
      * @return {@code this} assertion object
      * @since 0.1.0
+     * @deprecated Use {@link #extractFieldAsInteger(String)} instead.
      */
+    @Deprecated
     public JsonNodeAssert hasValueMoreThanForField(
             final int expectedValue, final String fieldName) {
         return hasNumericValueForField(
@@ -239,7 +261,9 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param fieldName the field name to verify
      * @return {@code this} assertion object
      * @since 0.1.0
+     * @deprecated Use {@link #extractFieldAsInteger(String)} instead.
      */
+    @Deprecated
     public JsonNodeAssert hasValueLessThanForField(
             final int expectedValue, final String fieldName) {
         return hasNumericValueForField(
@@ -268,6 +292,20 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
+     * Verifies that the actual JSON content is equal to the expected JSON node.
+     *
+     * @param expectedNode the expected JSON node
+     * @return {@code this} assertion object
+     * @throws AssertionError if the actual JSON is not equal to the expected JSON
+     * @since 0.1.3
+     */
+    public JsonNodeAssert hasJsonContent(final JsonNode expectedNode) {
+        final JsonNode actualNode = actual;
+        assertThat(actualNode).isEqualTo(expectedNode);
+        return this;
+    }
+
+    /**
      * Verifies that the actual JSON content is equal to the expected JSON string.
      *
      * <p>Both strings are parsed as JSON and compared structurally.
@@ -291,10 +329,31 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert hasJsonContent(final String expectedJson) {
-        final JsonNode actualNode = actual;
-        final JsonNode expectedNode = parseJson(expectedJson);
-        assertThat(actualNode).isEqualTo(expectedNode);
-        return this;
+        return hasJsonContent(JsonNodeLoader.toNode(expectedJson, mapper));
+    }
+
+    /**
+     * Verifies that the actual JSON content is equal to the JSON content in the specified path.
+     *
+     * @param expectedPath the path to the expected JSON file
+     * @return {@code this} assertion object
+     * @throws AssertionError if the file cannot be read or is not equal to the expected JSON
+     * @since 0.1.3
+     */
+    public JsonNodeAssert hasJsonContent(final Path expectedPath) {
+        return hasJsonContent(JsonNodeLoader.toNode(expectedPath, mapper));
+    }
+
+    /**
+     * Verifies that the actual JSON content is equal to the JSON content in the specified file.
+     *
+     * @param expectedFile the expected JSON file
+     * @return {@code this} assertion object
+     * @throws AssertionError if the file cannot be read or is not equal to the expected JSON
+     * @since 0.1.3
+     */
+    public JsonNodeAssert hasJsonContent(final File expectedFile) {
+        return hasJsonContent(JsonNodeLoader.toNode(expectedFile, mapper));
     }
 
     /**
@@ -303,6 +362,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expected the expected JSON node
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
+     * @since 0.1.0
      */
     public JsonNodeAssert isEqualToIgnoringFields(
             final JsonNode expected, final List<String> ignoredFields) {
@@ -313,6 +373,111 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
                     ignoredFields, actualNode);
         }
         return this;
+    }
+
+    /**
+     * Verifies structural JSON equality while ignoring named fields recursively.
+     *
+     * @param expected the expected JSON node
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.3
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final JsonNode expected, final String... ignoredFields) {
+        return isEqualToIgnoringFields(
+                expected,
+                ignoredFields != null ? Arrays.asList(ignoredFields) : Collections.emptyList());
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON string while ignoring named fields
+     * recursively.
+     *
+     * @param expectedJson the expected JSON string
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.3
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final String expectedJson, final List<String> ignoredFields) {
+        return isEqualToIgnoringFields(JsonNodeLoader.toNode(expectedJson, mapper), ignoredFields);
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON string while ignoring named fields
+     * recursively.
+     *
+     * @param expectedJson the expected JSON string
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.3
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final String expectedJson, final String... ignoredFields) {
+        return isEqualToIgnoringFields(
+                expectedJson,
+                ignoredFields != null ? Arrays.asList(ignoredFields) : Collections.emptyList());
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON path while ignoring named fields
+     * recursively.
+     *
+     * @param expectedPath the path to the expected JSON file
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.3
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final Path expectedPath, final List<String> ignoredFields) {
+        return isEqualToIgnoringFields(JsonNodeLoader.toNode(expectedPath, mapper), ignoredFields);
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON path while ignoring named fields
+     * recursively.
+     *
+     * @param expectedPath the path to the expected JSON file
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.3
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final Path expectedPath, final String... ignoredFields) {
+        return isEqualToIgnoringFields(
+                expectedPath,
+                ignoredFields != null ? Arrays.asList(ignoredFields) : Collections.emptyList());
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON file while ignoring named fields
+     * recursively.
+     *
+     * @param expectedFile the expected JSON file
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.3
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final File expectedFile, final List<String> ignoredFields) {
+        return isEqualToIgnoringFields(JsonNodeLoader.toNode(expectedFile, mapper), ignoredFields);
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON file while ignoring named fields
+     * recursively.
+     *
+     * @param expectedFile the expected JSON file
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.3
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final File expectedFile, final String... ignoredFields) {
+        return isEqualToIgnoringFields(
+                expectedFile,
+                ignoredFields != null ? Arrays.asList(ignoredFields) : Collections.emptyList());
     }
 
     private boolean equalsIgnoringFields(
@@ -526,6 +691,114 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     public JsonNodeAssert hasSizeForArrayField(final int expectedSize, final String fieldName) {
         extractingFieldAsArray(fieldName).hasSize(expectedSize);
         return this;
+    }
+
+    /**
+     * Extracts a child field as a String for standard AssertJ string assertions.
+     *
+     * @param fieldName the field name to extract
+     * @return a String assertion object
+     * @since 0.1.3
+     */
+    public AbstractStringAssert<?> extractFieldAsString(final String fieldName) {
+        hasField(fieldName);
+        final JsonNode field = actual.get(fieldName);
+        if (!field.isTextual()) {
+            failWithMessage(
+                    "Expected field '%s' to be a STRING but was <%s>",
+                    fieldName, field.getNodeType());
+        }
+        return Assertions.assertThat(field.asText());
+    }
+
+    /**
+     * Extracts a child field as an Integer for standard AssertJ integer assertions.
+     *
+     * @param fieldName the field name to extract
+     * @return an Integer assertion object
+     * @since 0.1.3
+     */
+    public AbstractIntegerAssert<?> extractFieldAsInteger(final String fieldName) {
+        hasField(fieldName);
+        final JsonNode field = actual.get(fieldName);
+        if (!field.isInt() && !field.canConvertToInt()) {
+            failWithMessage(
+                    "Expected field '%s' to be an INTEGER but was <%s>",
+                    fieldName, field.getNodeType());
+        }
+        return Assertions.assertThat(field.asInt());
+    }
+
+    /**
+     * Extracts a child field as a Long for standard AssertJ long assertions.
+     *
+     * @param fieldName the field name to extract
+     * @return a Long assertion object
+     * @since 0.1.3
+     */
+    public AbstractLongAssert<?> extractFieldAsLong(final String fieldName) {
+        hasField(fieldName);
+        final JsonNode field = actual.get(fieldName);
+        if (!field.isLong() && !field.canConvertToLong()) {
+            failWithMessage(
+                    "Expected field '%s' to be a LONG but was <%s>",
+                    fieldName, field.getNodeType());
+        }
+        return Assertions.assertThat(field.asLong());
+    }
+
+    /**
+     * Extracts a child field as a Double for standard AssertJ double assertions.
+     *
+     * @param fieldName the field name to extract
+     * @return a Double assertion object
+     * @since 0.1.3
+     */
+    public AbstractDoubleAssert<?> extractFieldAsDouble(final String fieldName) {
+        hasField(fieldName);
+        final JsonNode field = actual.get(fieldName);
+        if (!field.isDouble() && !field.isNumber()) {
+            failWithMessage(
+                    "Expected field '%s' to be a DOUBLE but was <%s>",
+                    fieldName, field.getNodeType());
+        }
+        return Assertions.assertThat(field.asDouble());
+    }
+
+    /**
+     * Extracts a child field as a Boolean for standard AssertJ boolean assertions.
+     *
+     * @param fieldName the field name to extract
+     * @return a Boolean assertion object
+     * @since 0.1.3
+     */
+    public AbstractBooleanAssert<?> extractFieldAsBoolean(final String fieldName) {
+        hasField(fieldName);
+        final JsonNode field = actual.get(fieldName);
+        if (!field.isBoolean()) {
+            failWithMessage(
+                    "Expected field '%s' to be a BOOLEAN but was <%s>",
+                    fieldName, field.getNodeType());
+        }
+        return Assertions.assertThat(field.asBoolean());
+    }
+
+    /**
+     * Extracts a child field as a BigDecimal for standard AssertJ BigDecimal assertions.
+     *
+     * @param fieldName the field name to extract
+     * @return a BigDecimal assertion object
+     * @since 0.1.3
+     */
+    public AbstractBigDecimalAssert<?> extractFieldAsBigDecimal(final String fieldName) {
+        hasField(fieldName);
+        final JsonNode field = actual.get(fieldName);
+        if (!field.isNumber()) {
+            failWithMessage(
+                    "Expected field '%s' to be a NUMBER but was <%s>",
+                    fieldName, field.getNodeType());
+        }
+        return Assertions.assertThat(field.decimalValue());
     }
 
     /**
