@@ -43,7 +43,7 @@ class JsonNodeAssertAdditionalTest {
                 new ObjectMapper()
                         .readTree(
                                 """
-                                {"name":"Vegeta","age":30,"active":true,\
+                                {"name":"Vegeta","age":30,"active":true,"score":9.5,"power":9000000000,\
                                 "profile":{"planet":"Vegeta"},"items":[{"id":1},{"id":2}]}\
                                 """);
     }
@@ -91,7 +91,7 @@ class JsonNodeAssertAdditionalTest {
                 new ObjectMapper()
                         .readTree(
                                 """
-                                {"name":"Vegeta","age":30,"active":false,\
+                                {"name":"Vegeta","age":30,"active":false,"score":9.5,"power":9000000000,\
                                 "profile":{"planet":"Earth"},"items":[{"id":1},{"id":2}]}\
                                 """);
 
@@ -105,7 +105,7 @@ class JsonNodeAssertAdditionalTest {
     void shouldCompareWhileIgnoringNestedFieldsUsingString() {
         final String expectedJson =
                 """
-                {"name":"Vegeta","age":30,"active":false,\
+                {"name":"Vegeta","age":30,"active":false,"score":9.5,"power":9000000000,\
                 "profile":{"planet":"Earth"},"items":[{"id":1},{"id":2}]}\
                 """;
 
@@ -119,7 +119,7 @@ class JsonNodeAssertAdditionalTest {
     void shouldCompareWhileIgnoringNestedFieldsUsingPathAndFile() throws Exception {
         final String expectedJson =
                 """
-                {"name":"Vegeta","age":30,"active":false,\
+                {"name":"Vegeta","age":30,"active":false,"score":9.5,"power":9000000000,\
                 "profile":{"planet":"Earth"},"items":[{"id":1},{"id":2}]}\
                 """;
         final Path path =
@@ -136,7 +136,7 @@ class JsonNodeAssertAdditionalTest {
     @Test
     void shouldAssertHasJsonContentWithNodePathAndFile() throws Exception {
         final String json =
-                "{\"name\":\"Vegeta\",\"age\":30,\"active\":true,\"profile\":{\"planet\":\"Vegeta\"},\"items\":[{\"id\":1},{\"id\":2}]}";
+                "{\"name\":\"Vegeta\",\"age\":30,\"active\":true,\"score\":9.5,\"power\":9000000000,\"profile\":{\"planet\":\"Vegeta\"},\"items\":[{\"id\":1},{\"id\":2}]}";
         final JsonNode expectedNode = new ObjectMapper().readTree(json);
         final Path expectedPath =
                 Files.writeString(Files.createTempFile(tempDir, "content-", ".json"), json);
@@ -166,5 +166,45 @@ class JsonNodeAssertAdditionalTest {
                                 throw new AssertionError("name is missing");
                             }
                         });
+    }
+
+    @Test
+    void shouldExtractFieldAsString() {
+        assertThat(actual).extractFieldAsString("name").startsWith("Veg").endsWith("eta");
+
+        thenThrownBy(() -> assertThat(actual).extractFieldAsString("age"))
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Expected field 'age' to be a STRING");
+    }
+
+    @Test
+    void shouldExtractFieldAsInteger() {
+        assertThat(actual).extractFieldAsInteger("age").isGreaterThan(20).isLessThan(40);
+
+        thenThrownBy(() -> assertThat(actual).extractFieldAsInteger("name"))
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Expected field 'name' to be an INTEGER");
+    }
+
+    @Test
+    void shouldExtractFieldAsLong() {
+        assertThat(actual).extractFieldAsLong("power").isGreaterThan(8000000000L);
+    }
+
+    @Test
+    void shouldExtractFieldAsDouble() {
+        assertThat(actual).extractFieldAsDouble("score").isBetween(9.0, 10.0);
+    }
+
+    @Test
+    void shouldExtractFieldAsBoolean() {
+        assertThat(actual).extractFieldAsBoolean("active").isTrue();
+    }
+
+    @Test
+    void shouldExtractFieldAsBigDecimal() {
+        assertThat(actual)
+                .extractFieldAsBigDecimal("score")
+                .isGreaterThan(java.math.BigDecimal.valueOf(9.0));
     }
 }
