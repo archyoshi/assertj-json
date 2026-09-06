@@ -2,7 +2,7 @@
 
 Changelog of assertj-json.
 
-## v0.1.0 (2026-09-06)
+## v0.1.1 (2026-09-06)
 
 ### Bug Fixes
 
