@@ -38,7 +38,7 @@ AssertJ JSON is currently available via [JitPack](https://jitpack.io/#archyoshi/
 <dependency>
   <groupId>com.github.archyoshi</groupId>
   <artifactId>assertj-json</artifactId>
-  <version>v0.1.0</version>
+  <version>v0.1.2</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -56,7 +56,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'com.github.archyoshi:assertj-json:v0.1.0'
+    testImplementation 'com.github.archyoshi:assertj-json:v0.1.2'
 }
 ```
 
@@ -69,7 +69,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("com.github.archyoshi:assertj-json:v0.1.0")
+    testImplementation("com.github.archyoshi:assertj-json:v0.1.2")
 }
 ```
 
