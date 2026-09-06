@@ -7,7 +7,7 @@
 
   <groupId>com.archyoshi</groupId>
   <artifactId>assertj-json</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
   <packaging>jar</packaging>
 
   <name>AssertJ JSON</name>
@@ -81,6 +81,8 @@
     <spotless-maven-plugin.version>3.9.0</spotless-maven-plugin.version>
     <google-java-format.version>1.36.1</google-java-format.version>
     <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
+    <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
+    <git-changelog-maven-plugin.version>2.2.11</git-changelog-maven-plugin.version>
   </properties>
 
   <dependencies>
@@ -282,6 +284,22 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>${versions-maven-plugin.version}</version>
+      </plugin>
+
+      <plugin>
+        <groupId>se.bjurr.gitchangelog</groupId>
+        <artifactId>git-changelog-maven-plugin</artifactId>
+        <version>${git-changelog-maven-plugin.version}</version>
+        <configuration>
+          <toRef>HEAD</toRef>
+          <filePath>CHANGELOG.md</filePath>
+        </configuration>
       </plugin>
     </plugins>
   </build>
