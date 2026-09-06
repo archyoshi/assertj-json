@@ -18,6 +18,9 @@ package com.archyoshi.assertj.json.api;
 import static com.archyoshi.assertj.json.JsonAssertions.assertThat;
 import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
@@ -70,6 +73,23 @@ class JsonComparisonAssertTest {
 
         assertThat(actual)
                 .partiallyContains("{\"profile\":{\"planet\":\"Vegeta\"},\"items\":[{\"id\":1}]}");
+    }
+
+    @Test
+    void shouldSupportJsonNodeAndFileForComparisons() throws Exception {
+        Path actual = jsonFile("{\"name\":\"Vegeta\",\"age\":30}");
+        Path expectedPath = jsonFile("{\"age\":30,\"name\":\"Vegeta\"}");
+        File expectedFile = expectedPath.toFile();
+        JsonNode expectedNode = new ObjectMapper().readTree("{\"age\":30,\"name\":\"Vegeta\"}");
+
+        assertThat(actual)
+                .hasSameFieldsAs(expectedNode)
+                .hasSameFieldsAs(expectedFile)
+                .hasSameContentAs(expectedNode)
+                .hasSameContentAs(expectedFile)
+                .partiallyContains(expectedNode)
+                .partiallyContains(expectedPath)
+                .partiallyContains(expectedFile);
     }
 
     @Test

@@ -16,9 +16,11 @@
 package com.archyoshi.assertj.json;
 
 import static com.archyoshi.assertj.json.JsonAssertions.assertThat;
+import static com.archyoshi.assertj.json.JsonAssertions.assertThatArray;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
@@ -77,5 +79,34 @@ class JsonAssertionsTest {
                 """);
 
         assertThat(actual, mapper).hasSameContentAs(expected);
+    }
+
+    @Test
+    void shouldAssertOnFileDirectly() throws Exception {
+        final Path actual = Files.createTempFile("assertj-json-", ".json");
+        Files.writeString(actual, "{\"name\":\"Vegeta\"}");
+        final File file = actual.toFile();
+
+        assertThat(file).hasSameFieldsAs("{\"name\":\"Goku\"}");
+    }
+
+    @Test
+    void shouldAssertOnJsonArrayFromStringPathAndFile() throws Exception {
+        final String jsonArray = "[{\"name\":\"Vegeta\"},{\"name\":\"Goku\"}]";
+        final Path arrayPath = Files.createTempFile("assertj-json-arr-", ".json");
+        Files.writeString(arrayPath, jsonArray);
+        final File arrayFile = arrayPath.toFile();
+
+        assertThatArray(jsonArray)
+                .containsElementWithFieldName("name")
+                .containsElementWithFieldAndValue("name", "Vegeta");
+
+        assertThatArray(arrayPath)
+                .containsElementWithFieldName("name")
+                .containsElementWithFieldAndValue("name", "Goku");
+
+        assertThatArray(arrayFile)
+                .containsElementWithFieldName("name")
+                .containsElementWithFieldAndValue("name", "Vegeta");
     }
 }

@@ -22,9 +22,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * @author archyoshi
@@ -79,6 +83,8 @@ class JsonNodeAssertAdditionalTest {
                 .isInstanceOf(AssertionError.class);
     }
 
+    @TempDir Path tempDir;
+
     @Test
     void shouldCompareWhileIgnoringNestedFields() throws JsonProcessingException {
         final JsonNode expected =
@@ -90,8 +96,52 @@ class JsonNodeAssertAdditionalTest {
                                 """);
 
         assertThat(actual).isEqualToIgnoringFields(expected, List.of("active", "planet"));
+        assertThat(actual).isEqualToIgnoringFields(expected, "active", "planet");
         thenThrownBy(() -> assertThat(actual).isEqualToIgnoringFields(expected, List.of("active")))
                 .isInstanceOf(AssertionError.class);
+    }
+
+    @Test
+    void shouldCompareWhileIgnoringNestedFieldsUsingString() {
+        final String expectedJson =
+                """
+                {"name":"Vegeta","age":30,"active":false,\
+                "profile":{"planet":"Earth"},"items":[{"id":1},{"id":2}]}\
+                """;
+
+        assertThat(actual).isEqualToIgnoringFields(expectedJson, List.of("active", "planet"));
+        assertThat(actual).isEqualToIgnoringFields(expectedJson, "active", "planet");
+        thenThrownBy(() -> assertThat(actual).isEqualToIgnoringFields(expectedJson, "active"))
+                .isInstanceOf(AssertionError.class);
+    }
+
+    @Test
+    void shouldCompareWhileIgnoringNestedFieldsUsingPathAndFile() throws Exception {
+        final String expectedJson =
+                """
+                {"name":"Vegeta","age":30,"active":false,\
+                "profile":{"planet":"Earth"},"items":[{"id":1},{"id":2}]}\
+                """;
+        final Path path = Files.writeString(Files.createTempFile(tempDir, "expected-", ".json"), expectedJson);
+        final File file = path.toFile();
+
+        assertThat(actual).isEqualToIgnoringFields(path, List.of("active", "planet"));
+        assertThat(actual).isEqualToIgnoringFields(path, "active", "planet");
+        assertThat(actual).isEqualToIgnoringFields(file, List.of("active", "planet"));
+        assertThat(actual).isEqualToIgnoringFields(file, "active", "planet");
+    }
+
+    @Test
+    void shouldAssertHasJsonContentWithNodePathAndFile() throws Exception {
+        final String json = "{\"name\":\"Vegeta\",\"age\":30,\"active\":true,\"profile\":{\"planet\":\"Vegeta\"},\"items\":[{\"id\":1},{\"id\":2}]}";
+        final JsonNode expectedNode = new ObjectMapper().readTree(json);
+        final Path expectedPath = Files.writeString(Files.createTempFile(tempDir, "content-", ".json"), json);
+        final File expectedFile = expectedPath.toFile();
+
+        assertThat(actual).hasJsonContent(expectedNode);
+        assertThat(actual).hasJsonContent(json);
+        assertThat(actual).hasJsonContent(expectedPath);
+        assertThat(actual).hasJsonContent(expectedFile);
     }
 
     @Test

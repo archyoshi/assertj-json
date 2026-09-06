@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -62,6 +63,23 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
     }
 
     /**
+     * Verifies that the actual JSON file has the same field names as the expected JSON node.
+     * Values are ignored, while nested object structure and array positions are preserved.
+     *
+     * @param expected the expected JSON node
+     * @return this assertion object
+     * @since 0.1.2
+     */
+    public JsonComparisonAssert hasSameFieldsAs(final JsonNode expected) {
+        final JsonNode actualNode = actualJson();
+        if (!sameFields(actualNode, expected)) {
+            failWithActualExpectedAndMessage(
+                    actualNode, expected, "Expected JSON files to have the same fields");
+        }
+        return this;
+    }
+
+    /**
      * Verifies that the actual JSON file and expected JSON file contain the same field names.
      * Values are ignored, while nested object structure and array positions are preserved.
      *
@@ -69,7 +87,18 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
      * @return this assertion object
      */
     public JsonComparisonAssert hasSameFieldsAs(final Path expectedFile) {
-        return hasSameFieldsAs(readJson(expectedFile));
+        return hasSameFieldsAs(JsonNodeLoader.toNode(expectedFile, mapper));
+    }
+
+    /**
+     * Verifies that the actual JSON file and expected JSON file contain the same field names.
+     *
+     * @param expectedFile the expected JSON file
+     * @return this assertion object
+     * @since 0.1.2
+     */
+    public JsonComparisonAssert hasSameFieldsAs(final File expectedFile) {
+        return hasSameFieldsAs(JsonNodeLoader.toNode(expectedFile, mapper));
     }
 
     /**
@@ -79,15 +108,20 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
      * @return this assertion object
      */
     public JsonComparisonAssert hasSameFieldsAs(final String expectedJson) {
-        return hasSameFieldsAs(parseJson(expectedJson));
+        return hasSameFieldsAs(JsonNodeLoader.toNode(expectedJson, mapper));
     }
 
-    private JsonComparisonAssert hasSameFieldsAs(final JsonNode expected) {
-        JsonNode actualNode = actualJson();
-        if (!sameFields(actualNode, expected)) {
-            failWithActualExpectedAndMessage(
-                    actualNode, expected, "Expected JSON files to have the same fields");
-        }
+    /**
+     * Verifies that the actual JSON file has the same parsed content as the expected JSON node.
+     * Formatting and object field ordering are ignored.
+     *
+     * @param expected the expected JSON node
+     * @return this assertion object
+     * @since 0.1.2
+     */
+    public JsonComparisonAssert hasSameContentAs(final JsonNode expected) {
+        final JsonNode actualNode = actualJson();
+        assertThat(actualNode).as("JSON content from %s", actual).isEqualTo(expected);
         return this;
     }
 
@@ -99,7 +133,18 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
      * @return this assertion object
      */
     public JsonComparisonAssert hasSameContentAs(final Path expectedFile) {
-        return hasSameContentAs(readJson(expectedFile));
+        return hasSameContentAs(JsonNodeLoader.toNode(expectedFile, mapper));
+    }
+
+    /**
+     * Verifies that the actual JSON file and expected JSON file have the same parsed content.
+     *
+     * @param expectedFile the expected JSON file
+     * @return this assertion object
+     * @since 0.1.2
+     */
+    public JsonComparisonAssert hasSameContentAs(final File expectedFile) {
+        return hasSameContentAs(JsonNodeLoader.toNode(expectedFile, mapper));
     }
 
     /**
@@ -109,31 +154,57 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
      * @return this assertion object
      */
     public JsonComparisonAssert hasSameContentAs(final String expectedJson) {
-        return hasSameContentAs(parseJson(expectedJson));
-    }
-
-    private JsonComparisonAssert hasSameContentAs(final JsonNode expected) {
-        JsonNode actualNode = actualJson();
-        assertThat(actualNode).as("JSON content from %s", actual).isEqualTo(expected);
-        return this;
+        return hasSameContentAs(JsonNodeLoader.toNode(expectedJson, mapper));
     }
 
     /**
-     * Verifies that the JSON document in the actual file contains the supplied JSON fragment.
+     * Verifies that the JSON document in the actual file contains the supplied JSON node.
      * Object fragments may omit fields; nested fragments are checked recursively. Arrays are
      * matched by position for the elements supplied in the fragment.
      *
-     * @param expectedFragment the JSON fragment to find
+     * @param expectedNode the JSON node to find
      * @return this assertion object
+     * @since 0.1.2
      */
-    public JsonComparisonAssert partiallyContains(final String expectedFragment) {
-        JsonNode actualNode = actualJson();
-        JsonNode expectedNode = parseJson(expectedFragment);
+    public JsonComparisonAssert partiallyContains(final JsonNode expectedNode) {
+        final JsonNode actualNode = actualJson();
         if (!contains(actualNode, expectedNode)) {
             failWithActualExpectedAndMessage(
                     actualNode, expectedNode, "Expected JSON to partially contain");
         }
         return this;
+    }
+
+    /**
+     * Verifies that the JSON document in the actual file contains the supplied JSON fragment string.
+     *
+     * @param expectedFragment the JSON fragment to find
+     * @return this assertion object
+     */
+    public JsonComparisonAssert partiallyContains(final String expectedFragment) {
+        return partiallyContains(JsonNodeLoader.toNode(expectedFragment, mapper));
+    }
+
+    /**
+     * Verifies that the JSON document in the actual file contains the supplied JSON file content.
+     *
+     * @param expectedFile the JSON file to find
+     * @return this assertion object
+     * @since 0.1.2
+     */
+    public JsonComparisonAssert partiallyContains(final Path expectedFile) {
+        return partiallyContains(JsonNodeLoader.toNode(expectedFile, mapper));
+    }
+
+    /**
+     * Verifies that the JSON document in the actual file contains the supplied JSON file content.
+     *
+     * @param expectedFile the JSON file to find
+     * @return this assertion object
+     * @since 0.1.2
+     */
+    public JsonComparisonAssert partiallyContains(final File expectedFile) {
+        return partiallyContains(JsonNodeLoader.toNode(expectedFile, mapper));
     }
 
     private boolean sameFields(final JsonNode actualNode, final JsonNode expectedNode) {

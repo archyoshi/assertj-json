@@ -16,6 +16,9 @@
 package com.archyoshi.assertj.json.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -66,6 +69,77 @@ public class JsonIterableAssert
      */
     public static JsonIterableAssert assertThat(final Collection<JsonNode> actual) {
         return new JsonIterableAssert(new ArrayList<>(actual));
+    }
+
+    private static final ObjectMapper DEFAULT_MAPPER = new ObjectMapper();
+
+    /**
+     * Creates assertions for a JSON array string using the default object mapper.
+     *
+     * @param jsonArray the JSON array string
+     * @return an assertion object for its elements
+     * @since 0.1.2
+     */
+    public static JsonIterableAssert assertThat(final String jsonArray) {
+        return assertThat(jsonArray, DEFAULT_MAPPER);
+    }
+
+    /**
+     * Creates assertions for a JSON array string using the supplied object mapper.
+     *
+     * @param jsonArray the JSON array string
+     * @param mapper the mapper used to parse the string
+     * @return an assertion object for its elements
+     * @since 0.1.2
+     */
+    public static JsonIterableAssert assertThat(final String jsonArray, final ObjectMapper mapper) {
+        return assertThat(JsonNodeLoader.toNode(jsonArray, mapper));
+    }
+
+    /**
+     * Creates assertions for a JSON array file at the given path using the default object mapper.
+     *
+     * @param jsonArrayPath the path to the JSON array file
+     * @return an assertion object for its elements
+     * @since 0.1.2
+     */
+    public static JsonIterableAssert assertThat(final Path jsonArrayPath) {
+        return assertThat(jsonArrayPath, DEFAULT_MAPPER);
+    }
+
+    /**
+     * Creates assertions for a JSON array file at the given path using the supplied mapper.
+     *
+     * @param jsonArrayPath the path to the JSON array file
+     * @param mapper the mapper used to parse JSON
+     * @return an assertion object for its elements
+     * @since 0.1.2
+     */
+    public static JsonIterableAssert assertThat(final Path jsonArrayPath, final ObjectMapper mapper) {
+        return assertThat(JsonNodeLoader.toNode(jsonArrayPath, mapper));
+    }
+
+    /**
+     * Creates assertions for a JSON array file using the default object mapper.
+     *
+     * @param jsonArrayFile the JSON array file
+     * @return an assertion object for its elements
+     * @since 0.1.2
+     */
+    public static JsonIterableAssert assertThat(final File jsonArrayFile) {
+        return assertThat(jsonArrayFile, DEFAULT_MAPPER);
+    }
+
+    /**
+     * Creates assertions for a JSON array file using the supplied mapper.
+     *
+     * @param jsonArrayFile the JSON array file
+     * @param mapper the mapper used to parse JSON
+     * @return an assertion object for its elements
+     * @since 0.1.2
+     */
+    public static JsonIterableAssert assertThat(final File jsonArrayFile, final ObjectMapper mapper) {
+        return assertThat(JsonNodeLoader.toNode(jsonArrayFile, mapper));
     }
 
     /**

@@ -21,6 +21,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -268,6 +272,20 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
+     * Verifies that the actual JSON content is equal to the expected JSON node.
+     *
+     * @param expectedNode the expected JSON node
+     * @return {@code this} assertion object
+     * @throws AssertionError if the actual JSON is not equal to the expected JSON
+     * @since 0.1.2
+     */
+    public JsonNodeAssert hasJsonContent(final JsonNode expectedNode) {
+        final JsonNode actualNode = actual;
+        assertThat(actualNode).isEqualTo(expectedNode);
+        return this;
+    }
+
+    /**
      * Verifies that the actual JSON content is equal to the expected JSON string.
      *
      * <p>Both strings are parsed as JSON and compared structurally.
@@ -291,10 +309,31 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @since 0.1.0
      */
     public JsonNodeAssert hasJsonContent(final String expectedJson) {
-        final JsonNode actualNode = actual;
-        final JsonNode expectedNode = parseJson(expectedJson);
-        assertThat(actualNode).isEqualTo(expectedNode);
-        return this;
+        return hasJsonContent(JsonNodeLoader.toNode(expectedJson, mapper));
+    }
+
+    /**
+     * Verifies that the actual JSON content is equal to the JSON content in the specified path.
+     *
+     * @param expectedPath the path to the expected JSON file
+     * @return {@code this} assertion object
+     * @throws AssertionError if the file cannot be read or is not equal to the expected JSON
+     * @since 0.1.2
+     */
+    public JsonNodeAssert hasJsonContent(final Path expectedPath) {
+        return hasJsonContent(JsonNodeLoader.toNode(expectedPath, mapper));
+    }
+
+    /**
+     * Verifies that the actual JSON content is equal to the JSON content in the specified file.
+     *
+     * @param expectedFile the expected JSON file
+     * @return {@code this} assertion object
+     * @throws AssertionError if the file cannot be read or is not equal to the expected JSON
+     * @since 0.1.2
+     */
+    public JsonNodeAssert hasJsonContent(final File expectedFile) {
+        return hasJsonContent(JsonNodeLoader.toNode(expectedFile, mapper));
     }
 
     /**
@@ -303,6 +342,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expected the expected JSON node
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
+     * @since 0.1.0
      */
     public JsonNodeAssert isEqualToIgnoringFields(
             final JsonNode expected, final List<String> ignoredFields) {
@@ -313,6 +353,111 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
                     ignoredFields, actualNode);
         }
         return this;
+    }
+
+    /**
+     * Verifies structural JSON equality while ignoring named fields recursively.
+     *
+     * @param expected the expected JSON node
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.2
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final JsonNode expected, final String... ignoredFields) {
+        return isEqualToIgnoringFields(
+                expected,
+                ignoredFields != null ? Arrays.asList(ignoredFields) : Collections.emptyList());
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON string while ignoring named fields
+     * recursively.
+     *
+     * @param expectedJson the expected JSON string
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.2
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final String expectedJson, final List<String> ignoredFields) {
+        return isEqualToIgnoringFields(JsonNodeLoader.toNode(expectedJson, mapper), ignoredFields);
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON string while ignoring named fields
+     * recursively.
+     *
+     * @param expectedJson the expected JSON string
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.2
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final String expectedJson, final String... ignoredFields) {
+        return isEqualToIgnoringFields(
+                expectedJson,
+                ignoredFields != null ? Arrays.asList(ignoredFields) : Collections.emptyList());
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON path while ignoring named fields
+     * recursively.
+     *
+     * @param expectedPath the path to the expected JSON file
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.2
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final Path expectedPath, final List<String> ignoredFields) {
+        return isEqualToIgnoringFields(JsonNodeLoader.toNode(expectedPath, mapper), ignoredFields);
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON path while ignoring named fields
+     * recursively.
+     *
+     * @param expectedPath the path to the expected JSON file
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.2
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final Path expectedPath, final String... ignoredFields) {
+        return isEqualToIgnoringFields(
+                expectedPath,
+                ignoredFields != null ? Arrays.asList(ignoredFields) : Collections.emptyList());
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON file while ignoring named fields
+     * recursively.
+     *
+     * @param expectedFile the expected JSON file
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.2
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final File expectedFile, final List<String> ignoredFields) {
+        return isEqualToIgnoringFields(JsonNodeLoader.toNode(expectedFile, mapper), ignoredFields);
+    }
+
+    /**
+     * Verifies structural JSON equality with an expected JSON file while ignoring named fields
+     * recursively.
+     *
+     * @param expectedFile the expected JSON file
+     * @param ignoredFields field names to ignore at every object level
+     * @return {@code this} assertion object
+     * @since 0.1.2
+     */
+    public JsonNodeAssert isEqualToIgnoringFields(
+            final File expectedFile, final String... ignoredFields) {
+        return isEqualToIgnoringFields(
+                expectedFile,
+                ignoredFields != null ? Arrays.asList(ignoredFields) : Collections.emptyList());
     }
 
     private boolean equalsIgnoringFields(
