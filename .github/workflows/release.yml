@@ -46,10 +46,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config pull.rebase false
 
       - name: Prepare Release Version
         run: |
-          git checkout ${{ inputs.release_branch }}
+          git fetch origin ${{ inputs.release_branch }}
+          git checkout -B ${{ inputs.release_branch }} origin/${{ inputs.release_branch }}
           ./mvnw -B versions:set -DnewVersion=${{ inputs.release_version }} -DgenerateBackupPoms=false
           ./mvnw -B git-changelog:git-changelog -Dgit-changelog.toRef=HEAD || true
           ./mvnw -B clean verify
@@ -58,9 +60,11 @@ jobs:
         run: |
           git add pom.xml
           if [ -f CHANGELOG.md ]; then git add CHANGELOG.md; fi
-          git commit -m "chore(release): release version ${{ inputs.release_version }}"
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(release): release version ${{ inputs.release_version }}"
+            git push origin ${{ inputs.release_branch }}
+          fi
           git tag -a "v${{ inputs.release_version }}" -m "Release v${{ inputs.release_version }}"
-          git push origin ${{ inputs.release_branch }}
           git push origin "v${{ inputs.release_version }}"
 
       - name: Create GitHub Release
@@ -75,8 +79,7 @@ jobs:
       - name: Bump Next Snapshot on Develop Branch
         run: |
           git fetch origin ${{ inputs.develop_branch }}
-          git checkout ${{ inputs.develop_branch }}
-          git pull origin ${{ inputs.develop_branch }}
+          git checkout -B ${{ inputs.develop_branch }} origin/${{ inputs.develop_branch }}
           git merge origin/${{ inputs.release_branch }} -m "chore: merge ${{ inputs.release_branch }} into ${{ inputs.develop_branch }} [skip ci]" --strategy-option=theirs || true
           ./mvnw -B versions:set -DnewVersion=${{ inputs.next_version }} -DgenerateBackupPoms=false
           ./mvnw -B clean compile
