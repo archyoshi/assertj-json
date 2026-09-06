@@ -19,7 +19,6 @@ import com.archyoshi.assertj.json.api.JsonComparisonAssert;
 import com.archyoshi.assertj.json.api.JsonIterableAssert;
 import com.archyoshi.assertj.json.api.JsonNodeAssert;
 import com.archyoshi.assertj.json.api.JsonNodeLoader;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
@@ -85,7 +84,7 @@ public final class JsonAssertions {
      * @return a new {@link JsonNodeAssert} instance
      */
     public static JsonNodeAssert assertThat(final String json, final ObjectMapper mapper) {
-        return new JsonNodeAssert(parseJson(json, mapper), mapper);
+        return new JsonNodeAssert(JsonNodeLoader.toNode(json, mapper), mapper);
     }
 
     /**
@@ -121,7 +120,7 @@ public final class JsonAssertions {
      * @param jsonFile the JSON file to assert on
      * @return a new {@link JsonComparisonAssert} instance
      * @throws AssertionError if the file cannot be read or contains invalid JSON
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public static JsonComparisonAssert assertThat(final File jsonFile) {
         return assertThat(jsonFile, MAPPER);
@@ -133,7 +132,7 @@ public final class JsonAssertions {
      * @param jsonFile the JSON file to assert on
      * @param mapper the mapper used to parse JSON
      * @return a new {@link JsonComparisonAssert} instance
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public static JsonComparisonAssert assertThat(final File jsonFile, final ObjectMapper mapper) {
         if (jsonFile == null) {
@@ -160,7 +159,7 @@ public final class JsonAssertions {
      * @param jsonArray the JSON array string
      * @return an assertion object for the array elements
      * @throws AssertionError if the string cannot be parsed or is not a JSON array
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public static JsonIterableAssert assertThatArray(final String jsonArray) {
         return assertThatArray(jsonArray, MAPPER);
@@ -173,7 +172,7 @@ public final class JsonAssertions {
      * @param mapper the mapper used to parse the string
      * @return an assertion object for the array elements
      * @throws AssertionError if the string cannot be parsed or is not a JSON array
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public static JsonIterableAssert assertThatArray(
             final String jsonArray, final ObjectMapper mapper) {
@@ -186,20 +185,21 @@ public final class JsonAssertions {
      * @param jsonArrayPath the path to the JSON array file
      * @return an assertion object for the array elements
      * @throws AssertionError if the file cannot be read or is not a JSON array
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public static JsonIterableAssert assertThatArray(final Path jsonArrayPath) {
         return assertThatArray(jsonArrayPath, MAPPER);
     }
 
     /**
-     * Creates iterable assertions for a JSON array file at the given path using the supplied mapper.
+     * Creates iterable assertions for a JSON array file at the given path using the supplied
+     * mapper.
      *
      * @param jsonArrayPath the path to the JSON array file
      * @param mapper the mapper used to parse JSON
      * @return an assertion object for the array elements
      * @throws AssertionError if the file cannot be read or is not a JSON array
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public static JsonIterableAssert assertThatArray(
             final Path jsonArrayPath, final ObjectMapper mapper) {
@@ -212,7 +212,7 @@ public final class JsonAssertions {
      * @param jsonArrayFile the JSON array file
      * @return an assertion object for the array elements
      * @throws AssertionError if the file cannot be read or is not a JSON array
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public static JsonIterableAssert assertThatArray(final File jsonArrayFile) {
         return assertThatArray(jsonArrayFile, MAPPER);
@@ -225,7 +225,7 @@ public final class JsonAssertions {
      * @param mapper the mapper used to parse JSON
      * @return an assertion object for the array elements
      * @throws AssertionError if the file cannot be read or is not a JSON array
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public static JsonIterableAssert assertThatArray(
             final File jsonArrayFile, final ObjectMapper mapper) {

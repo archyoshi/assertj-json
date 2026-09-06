@@ -277,7 +277,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedNode the expected JSON node
      * @return {@code this} assertion object
      * @throws AssertionError if the actual JSON is not equal to the expected JSON
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonNodeAssert hasJsonContent(final JsonNode expectedNode) {
         final JsonNode actualNode = actual;
@@ -318,7 +318,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedPath the path to the expected JSON file
      * @return {@code this} assertion object
      * @throws AssertionError if the file cannot be read or is not equal to the expected JSON
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonNodeAssert hasJsonContent(final Path expectedPath) {
         return hasJsonContent(JsonNodeLoader.toNode(expectedPath, mapper));
@@ -330,7 +330,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedFile the expected JSON file
      * @return {@code this} assertion object
      * @throws AssertionError if the file cannot be read or is not equal to the expected JSON
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonNodeAssert hasJsonContent(final File expectedFile) {
         return hasJsonContent(JsonNodeLoader.toNode(expectedFile, mapper));
@@ -361,7 +361,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expected the expected JSON node
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonNodeAssert isEqualToIgnoringFields(
             final JsonNode expected, final String... ignoredFields) {
@@ -377,7 +377,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedJson the expected JSON string
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonNodeAssert isEqualToIgnoringFields(
             final String expectedJson, final List<String> ignoredFields) {
@@ -391,7 +391,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedJson the expected JSON string
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonNodeAssert isEqualToIgnoringFields(
             final String expectedJson, final String... ignoredFields) {
@@ -407,7 +407,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedPath the path to the expected JSON file
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonNodeAssert isEqualToIgnoringFields(
             final Path expectedPath, final List<String> ignoredFields) {
@@ -421,7 +421,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedPath the path to the expected JSON file
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonNodeAssert isEqualToIgnoringFields(
             final Path expectedPath, final String... ignoredFields) {
@@ -437,7 +437,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedFile the expected JSON file
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonNodeAssert isEqualToIgnoringFields(
             final File expectedFile, final List<String> ignoredFields) {
@@ -451,7 +451,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param expectedFile the expected JSON file
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonNodeAssert isEqualToIgnoringFields(
             final File expectedFile, final String... ignoredFields) {

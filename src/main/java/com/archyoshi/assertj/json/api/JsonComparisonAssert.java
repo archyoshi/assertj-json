@@ -63,12 +63,12 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
     }
 
     /**
-     * Verifies that the actual JSON file has the same field names as the expected JSON node.
-     * Values are ignored, while nested object structure and array positions are preserved.
+     * Verifies that the actual JSON file has the same field names as the expected JSON node. Values
+     * are ignored, while nested object structure and array positions are preserved.
      *
      * @param expected the expected JSON node
      * @return this assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonComparisonAssert hasSameFieldsAs(final JsonNode expected) {
         final JsonNode actualNode = actualJson();
@@ -95,7 +95,7 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
      *
      * @param expectedFile the expected JSON file
      * @return this assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonComparisonAssert hasSameFieldsAs(final File expectedFile) {
         return hasSameFieldsAs(JsonNodeLoader.toNode(expectedFile, mapper));
@@ -117,7 +117,7 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
      *
      * @param expected the expected JSON node
      * @return this assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonComparisonAssert hasSameContentAs(final JsonNode expected) {
         final JsonNode actualNode = actualJson();
@@ -141,7 +141,7 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
      *
      * @param expectedFile the expected JSON file
      * @return this assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonComparisonAssert hasSameContentAs(final File expectedFile) {
         return hasSameContentAs(JsonNodeLoader.toNode(expectedFile, mapper));
@@ -158,13 +158,13 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
     }
 
     /**
-     * Verifies that the JSON document in the actual file contains the supplied JSON node.
-     * Object fragments may omit fields; nested fragments are checked recursively. Arrays are
-     * matched by position for the elements supplied in the fragment.
+     * Verifies that the JSON document in the actual file contains the supplied JSON node. Object
+     * fragments may omit fields; nested fragments are checked recursively. Arrays are matched by
+     * position for the elements supplied in the fragment.
      *
      * @param expectedNode the JSON node to find
      * @return this assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonComparisonAssert partiallyContains(final JsonNode expectedNode) {
         final JsonNode actualNode = actualJson();
@@ -176,7 +176,8 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
     }
 
     /**
-     * Verifies that the JSON document in the actual file contains the supplied JSON fragment string.
+     * Verifies that the JSON document in the actual file contains the supplied JSON fragment
+     * string.
      *
      * @param expectedFragment the JSON fragment to find
      * @return this assertion object
@@ -190,7 +191,7 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
      *
      * @param expectedFile the JSON file to find
      * @return this assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonComparisonAssert partiallyContains(final Path expectedFile) {
         return partiallyContains(JsonNodeLoader.toNode(expectedFile, mapper));
@@ -201,7 +202,7 @@ public class JsonComparisonAssert extends AbstractAssert<JsonComparisonAssert, P
      *
      * @param expectedFile the JSON file to find
      * @return this assertion object
-     * @since 0.1.2
+     * @since 0.1.3
      */
     public JsonComparisonAssert partiallyContains(final File expectedFile) {
         return partiallyContains(JsonNodeLoader.toNode(expectedFile, mapper));

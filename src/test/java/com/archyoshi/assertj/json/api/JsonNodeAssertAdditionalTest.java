@@ -122,7 +122,9 @@ class JsonNodeAssertAdditionalTest {
                 {"name":"Vegeta","age":30,"active":false,\
                 "profile":{"planet":"Earth"},"items":[{"id":1},{"id":2}]}\
                 """;
-        final Path path = Files.writeString(Files.createTempFile(tempDir, "expected-", ".json"), expectedJson);
+        final Path path =
+                Files.writeString(
+                        Files.createTempFile(tempDir, "expected-", ".json"), expectedJson);
         final File file = path.toFile();
 
         assertThat(actual).isEqualToIgnoringFields(path, List.of("active", "planet"));
@@ -133,9 +135,11 @@ class JsonNodeAssertAdditionalTest {
 
     @Test
     void shouldAssertHasJsonContentWithNodePathAndFile() throws Exception {
-        final String json = "{\"name\":\"Vegeta\",\"age\":30,\"active\":true,\"profile\":{\"planet\":\"Vegeta\"},\"items\":[{\"id\":1},{\"id\":2}]}";
+        final String json =
+                "{\"name\":\"Vegeta\",\"age\":30,\"active\":true,\"profile\":{\"planet\":\"Vegeta\"},\"items\":[{\"id\":1},{\"id\":2}]}";
         final JsonNode expectedNode = new ObjectMapper().readTree(json);
-        final Path expectedPath = Files.writeString(Files.createTempFile(tempDir, "content-", ".json"), json);
+        final Path expectedPath =
+                Files.writeString(Files.createTempFile(tempDir, "content-", ".json"), json);
         final File expectedFile = expectedPath.toFile();
 
         assertThat(actual).hasJsonContent(expectedNode);
