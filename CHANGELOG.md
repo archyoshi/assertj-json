@@ -2,6 +2,42 @@
 
 Changelog of assertj-json.
 
+## v0.1.3 (2026-09-06)
+
+### Features
+
+-  add field extraction methods returning AssertJ core assertions ([431bc](https://github.com/archyoshi/assertj-json/commit/431bc218817a5f8) Thami Inaflas)  
+-  add String, Path, and File overloads to JsonNode assertions and assertThatArray ([d9a08](https://github.com/archyoshi/assertj-json/commit/d9a08f461e20fa4) Thami Inaflas)  
+
+### Other changes
+
+**Merge pull request #1 from archyoshi/develop**
+
+* Develop 
+
+[d8dcd](https://github.com/archyoshi/assertj-json/commit/d8dcd8199bd4eaa) Thami Inaflas *2026-09-06 23:43:15*
+
+**feat:**
+
+
+[082eb](https://github.com/archyoshi/assertj-json/commit/082eb978b8e1015) Thami Inaflas *2026-09-06 22:17:11*
+
+**Merge branch 'develop' of https://github.com/archyoshi/assertj-json into develop**
+
+
+[d6a39](https://github.com/archyoshi/assertj-json/commit/d6a3966ef1d141a) Thami Inaflas *2026-09-06 21:47:26*
+
+**Merge branch 'main' into develop**
+
+
+[c2dcb](https://github.com/archyoshi/assertj-json/commit/c2dcb9921831b63) Thami Inaflas *2026-09-06 20:58:25*
+
+**Merge branch 'main' into develop**
+
+
+[302dd](https://github.com/archyoshi/assertj-json/commit/302dda4591ff04b) Thami Inaflas *2026-09-06 17:12:44*
+
+
 ## v0.1.2 (2026-09-06)
 
 ### Other changes
