@@ -1,0 +1,114 @@
+name: Auto Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: github.repository == 'archyoshi/assertj-json' && !contains(github.event.head_commit.message, 'chore(release)')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config pull.rebase false
+
+      - name: Detect Version and Prepare Release
+        id: prepare_release
+        run: |
+          # Get current version from POM
+          CURRENT_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "Current version in POM: $CURRENT_VERSION"
+          
+          if [[ "$CURRENT_VERSION" == *-SNAPSHOT ]]; then
+            RELEASE_VERSION=${CURRENT_VERSION%-SNAPSHOT}
+            echo "Release version: $RELEASE_VERSION"
+            echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+            echo "SHOULD_RELEASE=true" >> $GITHUB_ENV
+            
+            # Remove -SNAPSHOT from POM
+            ./mvnw -B versions:set -DnewVersion=$RELEASE_VERSION -DgenerateBackupPoms=false
+          else
+            echo "Version is not a SNAPSHOT. Skipping release."
+            echo "SHOULD_RELEASE=false" >> $GITHUB_ENV
+          fi
+
+      - name: Update Documentation Versions
+        if: env.SHOULD_RELEASE == 'true'
+        run: |
+          find docs/docs -type f -name '*.md' -exec sed -i -E "s|<version>v[0-9]+\.[0-9]+\.[0-9]+(-SNAPSHOT)?</version>|<version>v${{ env.RELEASE_VERSION }}</version>|g" {} +
+          find docs/docs -type f -name '*.md' -exec sed -i -E "s|assertj-json:v[0-9]+\.[0-9]+\.[0-9]+(-SNAPSHOT)?'|assertj-json:v${{ env.RELEASE_VERSION }}'|g" {} +
+
+      - name: Generate Changelog
+        if: env.SHOULD_RELEASE == 'true'
+        run: |
+          ./mvnw -B git-changelog:git-changelog -Dgit-changelog.toRef=HEAD || true
+
+      - name: Build and Verify
+        if: env.SHOULD_RELEASE == 'true'
+        run: ./mvnw -B clean verify
+
+      - name: Commit and Tag Release
+        if: env.SHOULD_RELEASE == 'true'
+        run: |
+          git add pom.xml docs/docs/
+          if [ -f CHANGELOG.md ]; then git add CHANGELOG.md; fi
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(release): release version ${{ env.RELEASE_VERSION }} [skip ci]"
+            git push origin main
+          fi
+          git tag -a "v${{ env.RELEASE_VERSION }}" -m "Release v${{ env.RELEASE_VERSION }}"
+          git push origin "v${{ env.RELEASE_VERSION }}"
+
+      - name: Create GitHub Release
+        if: env.SHOULD_RELEASE == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ env.RELEASE_VERSION }}"
+          name: "v${{ env.RELEASE_VERSION }}"
+          generate_release_notes: true
+          files: |
+            target/*.jar
+
+      - name: Bump Next Snapshot on Develop Branch
+        if: env.SHOULD_RELEASE == 'true'
+        run: |
+          # Calculate next patch version
+          IFS='.' read -r -a VERSION_PARTS <<< "${{ env.RELEASE_VERSION }}"
+          PATCH=$((VERSION_PARTS[2] + 1))
+          NEXT_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.${PATCH}-SNAPSHOT"
+          echo "Next version: $NEXT_VERSION"
+          
+          git fetch origin develop
+          git checkout -B develop origin/develop
+          
+          # Merge main (which has the release commit) into develop
+          git merge main -m "chore: merge main into develop [skip ci]" --strategy-option=theirs || true
+          
+          # Bump to next snapshot
+          ./mvnw -B versions:set -DnewVersion=$NEXT_VERSION -DgenerateBackupPoms=false
+          
+          git add pom.xml
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: prepare next development iteration $NEXT_VERSION [skip ci]"
+            git push origin develop
+          fi
