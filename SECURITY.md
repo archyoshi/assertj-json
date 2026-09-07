@@ -4,7 +4,7 @@
 
 If you discover a security vulnerability in AssertJ JSON, please **do not** create a public GitHub issue. Instead, please report it responsibly by:
 
-1. **Email**: Send a detailed report to [security@example.com] with:
+1. **Email**: Send a detailed report to [assertj-json@archyoshi.com] with:
    - Description of the vulnerability
    - Steps to reproduce (if applicable)
    - Potential impact
