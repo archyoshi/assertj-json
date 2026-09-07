@@ -6,7 +6,7 @@
 
   <groupId>com.archyoshi</groupId>
   <artifactId>assertj-json</artifactId>
-  <version>0.1.3</version>
+  <version>0.1.4-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>AssertJ JSON</name>
@@ -31,7 +31,7 @@
     <developer>
       <id>archyoshi</id>
       <name>Archyoshi</name>
-      <email>assertj@archyoshi.com</email>
+      <email>assertj-json@archyoshi.com</email>
       <roles>
         <role>Owner</role>
         <role>Developer</role>

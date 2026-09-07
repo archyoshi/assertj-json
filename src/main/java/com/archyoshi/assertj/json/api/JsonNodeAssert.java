@@ -145,10 +145,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param <T> the target Java type
      * @return {@code this} assertion object
      * @since 0.1.0
-     * @deprecated Use type-specific extraction methods like {@link #extractFieldAsString(String)}
-     *     instead.
      */
-    @Deprecated
     public <T> JsonNodeAssert hasTypedValueForField(
             final T expectedValue, final String fieldName, final Class<T> valueType) {
         final JsonNode node = actual;
@@ -179,9 +176,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @throws AssertionError if the actual JSON object is null
      * @throws AssertionError if the field does not exist or has a different value
      * @since 0.1.0
-     * @deprecated Use {@link #extractFieldAsString(String)} instead.
      */
-    @Deprecated
     public JsonNodeAssert hasValueForField(final String expectedValue, final String fieldName) {
         final JsonNode node = actual;
         hasField(fieldName);
@@ -212,9 +207,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @throws AssertionError if the actual JSON object is null
      * @throws AssertionError if the field does not exist or has a different value
      * @since 0.1.0
-     * @deprecated Use {@link #extractFieldAsInteger(String)} instead.
      */
-    @Deprecated
     public JsonNodeAssert hasValueForField(final int expectedValue, final String fieldName) {
         final JsonNode node = actual;
         hasField(fieldName);
