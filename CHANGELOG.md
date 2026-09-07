@@ -2,6 +2,26 @@
 
 Changelog of assertj-json.
 
+## v0.1.2 (2026-09-06)
+
+### Other changes
+
+**Update readme**
+
+
+[2c666](https://github.com/archyoshi/assertj-json/commit/2c6663605154596) Thami Inaflas *2026-09-06 21:45:01*
+
+**Merge branch 'main' of https://github.com/archyoshi/assertj-json**
+
+
+[87f66](https://github.com/archyoshi/assertj-json/commit/87f6647d15720b5) Thami Inaflas *2026-09-06 21:41:18*
+
+**Fix license header in files**
+
+
+[04a70](https://github.com/archyoshi/assertj-json/commit/04a705dff53348f) Thami Inaflas *2026-09-06 21:39:27*
+
+
 ## v0.1.1 (2026-09-06)
 
 ### Bug Fixes
