@@ -42,7 +42,9 @@ import org.assertj.core.api.ThrowingConsumer;
 /**
  * Assertions for Jackson {@link JsonNode} objects.
  *
- * <p>This class extends AssertJ's {@link AbstractAssert} to provide fluent assertions for JSON
+ * <p>
+ * This class extends AssertJ's {@link AbstractAssert} to provide fluent
+ * assertions for JSON
  * structures parsed using Jackson.
  *
  * @author archyoshi
@@ -63,7 +65,8 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Creates an assertion object for an already parsed JSON node using the supplied mapper.
+     * Creates an assertion object for an already parsed JSON node using the
+     * supplied mapper.
      *
      * @param actual the parsed JSON node
      * @param mapper the mapper used for assertion-side parsing and conversions
@@ -76,7 +79,8 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     /**
      * Verifies that the actual JSON object has a field with the given name.
      *
-     * <p>Example:
+     * <p>
+     * Example:
      *
      * <pre>
      * <code class='java'> ObjectMapper mapper = new ObjectMapper();
@@ -92,7 +96,8 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * @param fieldName the name of the field to verify
      * @return {@code this} assertion object
      * @throws AssertionError if the actual JSON object is null
-     * @throws AssertionError if the actual JSON object does not have a field with the given name
+     * @throws AssertionError if the actual JSON object does not have a field with
+     *                        the given name
      * @since 0.1.0
      */
     public JsonNodeAssert hasField(final String fieldName) {
@@ -124,7 +129,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     /**
      * Verifies the Jackson node type of a field.
      *
-     * @param fieldName the field name to verify
+     * @param fieldName    the field name to verify
      * @param expectedType the expected node type
      * @return {@code this} assertion object
      * @since 0.1.0
@@ -140,9 +145,9 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * Verifies a field value after converting it to the requested Java type.
      *
      * @param expectedValue the expected value
-     * @param fieldName the field name to verify
-     * @param valueType the target Java type
-     * @param <T> the target Java type
+     * @param fieldName     the field name to verify
+     * @param valueType     the target Java type
+     * @param <T>           the target Java type
      * @return {@code this} assertion object
      * @since 0.1.0
      */
@@ -155,9 +160,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Verifies that the actual JSON object has a field with the given name and string value.
+     * Verifies that the actual JSON object has a field with the given name and
+     * string value.
      *
-     * <p>Example:
+     * <p>
+     * Example:
      *
      * <pre>
      * <code class='java'> ObjectMapper mapper = new ObjectMapper();
@@ -171,7 +178,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * </pre>
      *
      * @param expectedValue the expected string value
-     * @param fieldName the name of the field to verify
+     * @param fieldName     the name of the field to verify
      * @return {@code this} assertion object
      * @throws AssertionError if the actual JSON object is null
      * @throws AssertionError if the field does not exist or has a different value
@@ -186,9 +193,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Verifies that the actual JSON object has a field with the given name and integer value.
+     * Verifies that the actual JSON object has a field with the given name and
+     * integer value.
      *
-     * <p>Example:
+     * <p>
+     * Example:
      *
      * <pre>
      * <code class='java'> ObjectMapper mapper = new ObjectMapper();
@@ -202,7 +211,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * </pre>
      *
      * @param expectedValue the expected integer value
-     * @param fieldName the name of the field to verify
+     * @param fieldName     the name of the field to verify
      * @return {@code this} assertion object
      * @throws AssertionError if the actual JSON object is null
      * @throws AssertionError if the field does not exist or has a different value
@@ -220,7 +229,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * Verifies that a numeric field equals the expected value.
      *
      * @param expectedValue the expected value
-     * @param fieldName the field name to verify
+     * @param fieldName     the field name to verify
      * @return {@code this} assertion object
      * @since 0.1.0
      * @deprecated Use {@link #extractFieldAsInteger(String)} instead.
@@ -235,7 +244,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * Verifies that a numeric field is greater than the expected value.
      *
      * @param expectedValue the exclusive lower bound
-     * @param fieldName the field name to verify
+     * @param fieldName     the field name to verify
      * @return {@code this} assertion object
      * @since 0.1.0
      * @deprecated Use {@link #extractFieldAsInteger(String)} instead.
@@ -251,7 +260,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * Verifies that a numeric field is less than the expected value.
      *
      * @param expectedValue the exclusive upper bound
-     * @param fieldName the field name to verify
+     * @param fieldName     the field name to verify
      * @return {@code this} assertion object
      * @since 0.1.0
      * @deprecated Use {@link #extractFieldAsInteger(String)} instead.
@@ -301,9 +310,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     /**
      * Verifies that the actual JSON content is equal to the expected JSON string.
      *
-     * <p>Both strings are parsed as JSON and compared structurally.
+     * <p>
+     * Both strings are parsed as JSON and compared structurally.
      *
-     * <p>Example:
+     * <p>
+     * Example:
      *
      * <pre>
      * <code class='java'> ObjectMapper mapper = new ObjectMapper();
@@ -326,11 +337,13 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Verifies that the actual JSON content is equal to the JSON content in the specified path.
+     * Verifies that the actual JSON content is equal to the JSON content in the
+     * specified path.
      *
      * @param expectedPath the path to the expected JSON file
      * @return {@code this} assertion object
-     * @throws AssertionError if the file cannot be read or is not equal to the expected JSON
+     * @throws AssertionError if the file cannot be read or is not equal to the
+     *                        expected JSON
      * @since 0.1.3
      */
     public JsonNodeAssert hasJsonContent(final Path expectedPath) {
@@ -338,11 +351,13 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Verifies that the actual JSON content is equal to the JSON content in the specified file.
+     * Verifies that the actual JSON content is equal to the JSON content in the
+     * specified file.
      *
      * @param expectedFile the expected JSON file
      * @return {@code this} assertion object
-     * @throws AssertionError if the file cannot be read or is not equal to the expected JSON
+     * @throws AssertionError if the file cannot be read or is not equal to the
+     *                        expected JSON
      * @since 0.1.3
      */
     public JsonNodeAssert hasJsonContent(final File expectedFile) {
@@ -352,7 +367,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     /**
      * Verifies structural JSON equality while ignoring named fields recursively.
      *
-     * @param expected the expected JSON node
+     * @param expected      the expected JSON node
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
      * @since 0.1.0
@@ -371,7 +386,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     /**
      * Verifies structural JSON equality while ignoring named fields recursively.
      *
-     * @param expected the expected JSON node
+     * @param expected      the expected JSON node
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
      * @since 0.1.3
@@ -384,10 +399,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Verifies structural JSON equality with an expected JSON string while ignoring named fields
+     * Verifies structural JSON equality with an expected JSON string while ignoring
+     * named fields
      * recursively.
      *
-     * @param expectedJson the expected JSON string
+     * @param expectedJson  the expected JSON string
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
      * @since 0.1.3
@@ -398,10 +414,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Verifies structural JSON equality with an expected JSON string while ignoring named fields
+     * Verifies structural JSON equality with an expected JSON string while ignoring
+     * named fields
      * recursively.
      *
-     * @param expectedJson the expected JSON string
+     * @param expectedJson  the expected JSON string
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
      * @since 0.1.3
@@ -414,10 +431,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Verifies structural JSON equality with an expected JSON path while ignoring named fields
+     * Verifies structural JSON equality with an expected JSON path while ignoring
+     * named fields
      * recursively.
      *
-     * @param expectedPath the path to the expected JSON file
+     * @param expectedPath  the path to the expected JSON file
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
      * @since 0.1.3
@@ -428,10 +446,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Verifies structural JSON equality with an expected JSON path while ignoring named fields
+     * Verifies structural JSON equality with an expected JSON path while ignoring
+     * named fields
      * recursively.
      *
-     * @param expectedPath the path to the expected JSON file
+     * @param expectedPath  the path to the expected JSON file
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
      * @since 0.1.3
@@ -444,10 +463,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Verifies structural JSON equality with an expected JSON file while ignoring named fields
+     * Verifies structural JSON equality with an expected JSON file while ignoring
+     * named fields
      * recursively.
      *
-     * @param expectedFile the expected JSON file
+     * @param expectedFile  the expected JSON file
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
      * @since 0.1.3
@@ -458,10 +478,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Verifies structural JSON equality with an expected JSON file while ignoring named fields
+     * Verifies structural JSON equality with an expected JSON file while ignoring
+     * named fields
      * recursively.
      *
-     * @param expectedFile the expected JSON file
+     * @param expectedFile  the expected JSON file
      * @param ignoredFields field names to ignore at every object level
      * @return {@code this} assertion object
      * @since 0.1.3
@@ -517,7 +538,8 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     /**
      * Verifies that the actual JSON node is a JSON object.
      *
-     * <p>Example:
+     * <p>
+     * Example:
      *
      * <pre>
      * <code class='java'> ObjectMapper mapper = new ObjectMapper();
@@ -546,7 +568,8 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     /**
      * Verifies that the actual JSON node is a JSON array.
      *
-     * <p>Example:
+     * <p>
+     * Example:
      *
      * <pre>
      * <code class='java'> ObjectMapper mapper = new ObjectMapper();
@@ -575,9 +598,11 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     /**
      * Verifies that the actual JSON node is empty.
      *
-     * <p>A JSON object or array is empty if it contains no elements.
+     * <p>
+     * A JSON object or array is empty if it contains no elements.
      *
-     * <p>Example:
+     * <p>
+     * Example:
      *
      * <pre>
      * <code class='java'> ObjectMapper mapper = new ObjectMapper();
@@ -614,7 +639,8 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     /**
      * Verifies that the actual JSON node is not empty.
      *
-     * <p>Example:
+     * <p>
+     * Example:
      *
      * <pre>
      * <code class='java'> ObjectMapper mapper = new ObjectMapper();
@@ -649,7 +675,8 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     /**
      * Verifies that the actual JSON array has the given size.
      *
-     * <p>Example:
+     * <p>
+     * Example:
      *
      * <pre>
      * <code class='java'> ObjectMapper mapper = new ObjectMapper();
@@ -677,7 +704,7 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
      * Verifies the size of a named JSON array field.
      *
      * @param expectedSize the expected array size
-     * @param fieldName the array field name
+     * @param fieldName    the array field name
      * @return {@code this} assertion object
      * @since 0.1.0
      */
@@ -777,7 +804,8 @@ public class JsonNodeAssert extends AbstractAssert<JsonNodeAssert, JsonNode> {
     }
 
     /**
-     * Extracts a child field as a BigDecimal for standard AssertJ BigDecimal assertions.
+     * Extracts a child field as a BigDecimal for standard AssertJ BigDecimal
+     * assertions.
      *
      * @param fieldName the field name to extract
      * @return a BigDecimal assertion object
