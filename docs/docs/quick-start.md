@@ -30,7 +30,7 @@ Add AssertJ-JSON to your project using your preferred build tool. AssertJ-JSON i
 <dependency>
   <groupId>com.github.archyoshi</groupId>
   <artifactId>assertj-json</artifactId>
-  <version>v0.1.4</version>
+  <version>v0.1.5</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -40,7 +40,7 @@ Add AssertJ-JSON to your project using your preferred build tool. AssertJ-JSON i
 Add the following to your `build.gradle`:
 
 ```groovy
-testImplementation 'com.github.archyoshi:assertj-json:v0.1.4'
+testImplementation 'com.github.archyoshi:assertj-json:v0.1.5'
 ```
 
 ## Basic Usage

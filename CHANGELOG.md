@@ -2,6 +2,50 @@
 
 Changelog of assertj-json.
 
+## v0.1.4 (2026-09-07)
+
+### Features
+
+-  add mailing list documentation and automated release workflow ([7b243](https://github.com/archyoshi/assertj-json/commit/7b243a52fd9c634) Thami Inaflas)  
+-  introduce JsonNodeAssert for fluent Jackson JsonNode assertions ([9e4c1](https://github.com/archyoshi/assertj-json/commit/9e4c14294e5feb2) Thami Inaflas)  
+-  introduce JsonNodeAssert for fluent Jackson assertions and add CI workflow for documentation deployment ([315f5](https://github.com/archyoshi/assertj-json/commit/315f54b8a2122ce) Thami Inaflas)  
+-  initialize documentation site using Docusaurus and add initial JsonNodeAssert documentation ([0a79d](https://github.com/archyoshi/assertj-json/commit/0a79d6d2c4d0b69) Thami Inaflas)  
+
+### Other changes
+
+**Merge pull request #3 from archyoshi/develop**
+
+* feat: add mailing list documentation and automated release workflow 
+
+[3a5ca](https://github.com/archyoshi/assertj-json/commit/3a5ca250c277b13) Thami Inaflas *2026-09-07 21:51:04*
+
+**Merge pull request #2 from archyoshi/develop**
+
+* add documentation 
+
+[28d97](https://github.com/archyoshi/assertj-json/commit/28d97e571834d79) Thami Inaflas *2026-09-07 15:40:32*
+
+**Merge branch 'develop' of https://github.com/archyoshi/assertj-json into develop**
+
+
+[78f1f](https://github.com/archyoshi/assertj-json/commit/78f1f999e761be7) Thami Inaflas *2026-09-07 15:38:30*
+
+**Fixed code structure**
+
+
+[3d401](https://github.com/archyoshi/assertj-json/commit/3d401d84674392a) Thami Inaflas *2026-09-07 15:38:19*
+
+**Merge branch 'develop' of https://github.com/archyoshi/assertj-json into develop**
+
+
+[69cbe](https://github.com/archyoshi/assertj-json/commit/69cbe0ca2939b3d) Thami Inaflas *2026-09-07 01:04:51*
+
+**Updated email**
+
+
+[4b3e7](https://github.com/archyoshi/assertj-json/commit/4b3e70100f39e47) Thami Inaflas *2026-09-07 01:04:38*
+
+
 ## v0.1.3 (2026-09-06)
 
 ### Features
