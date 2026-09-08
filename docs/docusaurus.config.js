@@ -14,10 +14,10 @@ const config = {
   tagline: 'Fluent assertions for JSON',
   favicon: 'img/favicon.ico',
 
-  url: 'https://inafl.github.io',
-  baseUrl: '/assertj-json/',
+  url: 'https://assertj-json.archyoshi.com/',
+  baseUrl: '/',
 
-  organizationName: 'inafl',
+  organizationName: 'archyoshi',
   projectName: 'assertj-json',
 
   onBrokenLinks: 'throw',
@@ -34,7 +34,7 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          editUrl: 'https://github.com/inafl/assertj-json/tree/main/docs/',
+          editUrl: 'https://github.com/archyoshi/assertj-json/tree/main/docs/',
         },
         blog: false,
         theme: {
@@ -74,12 +74,12 @@ const config = {
             label: 'Quick Start',
           },
           {
-            href: 'https://javadoc.io/doc/com.github.archyoshi/assertj-json', // Placeholder API link
+            href: 'https://javadoc.jitpack.io/com/github/archyoshi/assertj-json/0.1.4/javadoc/index.html',
             label: 'API',
             position: 'left',
           },
           {
-            href: 'https://github.com/inafl/assertj-json',
+            href: 'https://github.com/archyoshi/assertj-json',
             label: 'GitHub',
             position: 'right',
           },
@@ -106,7 +106,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/inafl/assertj-json',
+                href: 'https://github.com/archyoshi/assertj-json',
               },
             ],
           },
